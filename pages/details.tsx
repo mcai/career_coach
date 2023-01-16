@@ -24,6 +24,15 @@ export const exampleDetailsList: CoachDetails[] = [
 
 export interface CoachResult {
   name: string;
-  description: string;
-  missingSkills: string[];
+  requirements: {
+    monthlySalaryLowInDollar: number;
+    monthlySalaryHighInDollar: number;
+    degree: string;
+    responsibility: string;
+    experience: string;
+    skills: string[];
+  };
+  relatedCompanies: string[];
+  relatedProducts: string[];
+  interviewQuestions: string[];
 }

@@ -179,8 +179,14 @@ export default class Index extends React.Component<IndexProps, IndexState> {
             {this.state.result.map((job, index) => (
               <li key={index}>
                 <p className="font-medium">{job.name}</p>
-                <p className="text-gray-600">{job.description}</p>
-                <p className="text-red-500">Missing Skills: {job.missingSkills?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Monthly Salary: {job.requirements.monthlySalaryLowInDollar} - {job.requirements.monthlySalaryHighInDollar}</p>
+                <p className="text-gray-600">Degree: {job.requirements.degree}</p>
+                <p className="text-gray-600">Responsibility: {job.requirements.responsibility}</p>
+                <p className="text-gray-600">Experience: {job.requirements.experience}</p>
+                <p className="text-gray-600">Skills: {job.requirements.skills?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Related Companies: {job.relatedCompanies?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Related Products: {job.relatedProducts?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Interview Questions: {job.interviewQuestions?.join(", ") ?? ""}</p>
               </li>
             ))}
           </ul>

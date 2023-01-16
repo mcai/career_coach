@@ -59,14 +59,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 function generatePrompt(details: CoachDetails) {
-    return `I am a ${details.gender},` +
-            `${details.age} years old person from ${details.country}.` +
-            `My current career is ${details.career}.` +
-            `My educational experience is ${details.educationExperience}` +
-            `and my work experience is ${details.workExperience}.` +
-            `My hobbies are ${details.hobbies}` +
-            `and my interests are ${details.interests}.` +
-            `Your Task is to output a single JSON array, nothing else, ` + 
-            `of a few job positions (name, description, missing skills) ` + 
-            `that fit my profile and required skills?`
+    const input = `I'll give you a single JSON string (gender:string, age:string, country:string, career:string, educationExperience:string, workExperience:string, hobbies:string, interests:string) describing my profile.`;
+    const expected_output = `Your Task is to output a single JSON array, nothing else, of a few job positions (name:string, requirements:{monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string, experience:string; skills:string[]}, relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]) that fit my profile?`;
+    const first_question = `Input:${JSON.stringify(details)}, output:`;
+
+    return input + expected_output + first_question;
 }
