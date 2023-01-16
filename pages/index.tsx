@@ -180,7 +180,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
               <li key={index}>
                 <p className="font-medium">{job.name}</p>
                 <p className="text-gray-600">{job.description}</p>
-                <p className="text-red-500">Missing Skills: {job.missingSkills}</p>
+                <p className="text-red-500">Missing Skills: {job.missingSkills?.join(", ") ?? ""}</p>
               </li>
             ))}
           </ul>

@@ -39,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const result: CoachResult[] = JSON.parse(resultStr || "[]");
 
-        console.log(`result: ${result}`);
+        console.log(`result: ${resultStr}`);
 
         res.status(200).json({ result: result });
     } catch (error: any) {

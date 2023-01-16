@@ -25,5 +25,5 @@ export const exampleDetailsList: CoachDetails[] = [
 export interface CoachResult {
   name: string;
   description: string;
-  missingSkills: string;
+  missingSkills: string[];
 }
