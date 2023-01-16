@@ -3,6 +3,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
+import { CoachDetails, CoachResult } from "../details";
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -17,8 +18,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { details } = req.body;
     
-    console.log(`details: ${details}`);
-
     if (!details) {
         res.status(400).json({ error: "Missing details" });
         return;
@@ -36,7 +35,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             max_tokens: 1024,
         });
 
-        const result = response.data.choices[0].text;
+        const resultStr = response.data.choices[0].text;
+
+        const result: CoachResult[] = JSON.parse(resultStr || "[]");
 
         console.log(`result: ${result}`);
 
@@ -56,6 +57,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-function generatePrompt(details: any) {
-    return `please coach me on my future career. my details are ${details}.`;
+
+function generatePrompt(details: CoachDetails) {
+    return `I am a ${details.gender},` +
+            `${details.age} years old person from ${details.country}.` +
+            `My current career is ${details.career}.` +
+            `My educational experience is ${details.educationExperience}` +
+            `and my work experience is ${details.workExperience}.` +
+            `My hobbies are ${details.hobbies}` +
+            `and my interests are ${details.interests}.` +
+            `Your Task is to output a single JSON array, nothing else, ` + 
+            `of a few job positions (name, description, missing skills) ` + 
+            `that fit my profile and required skills?`
 }
