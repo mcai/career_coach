@@ -59,8 +59,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 function generatePrompt(details: CoachDetails) {
-    const input = `I'll give you a single JSON string (gender:string, age:string, country:string, career:string, educationExperience:string, workExperience:string, hobbies:string, interests:string) describing my profile.`;
-    const expected_output = `Your Task is to output a single JSON array, nothing else, of a few job positions (name:string, requirements:{monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string, experience:string; skills:string[]}, relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]) that fit my profile?`;
+    const input = `I'll give you a JSON string describing my personal profile (gender:string, age:string, country:string, career:string, educationExperience:string, workExperience:string, hobbies:string, interests:string).`;
+    const expected_output = `You are required to generate a JSON array of job positions that align with my qualifications (name:string, requirements:{monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string, experience:string; skills:string[]}, relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]).`;
     const first_question = `Input:${JSON.stringify(details)}, output:`;
 
     return input + expected_output + first_question;
