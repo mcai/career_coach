@@ -4,11 +4,11 @@
 
 @layer components {
     .custom-form {
-        @apply p-6;
+        @apply p-6 bg-gray-100;
     }
 
     .custom-header {
-        @apply text-2xl font-medium;
+        @apply text-2xl font-medium text-gray-800;
     }
 
     .custom-form-group {
@@ -24,11 +24,11 @@
     }
 
     .custom-form-select {
-        @apply bg-gray-200 rounded-lg p-2 w-full;
+        @apply bg-white rounded-lg p-2 w-full border-gray-400;
     }
 
     .custom-form-input {
-        @apply bg-gray-200 rounded-lg p-2 w-full;
+        @apply bg-white rounded-lg p-2 w-full border-gray-400;
     }
 
     .custom-form-button {
@@ -41,5 +41,25 @@
 
     .custom-form-button-secondary {
         @apply bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400;
+    }
+
+    .item-list {
+        @apply text-gray-700 text-lg font-medium leading-5;
+    }
+    
+    .item-list-item {
+        @apply flex items-center justify-between p-2 border-b-2 border-gray-200;
+    }
+    
+    .item-list-input {
+        @apply w-full border border-gray-400 p-2 rounded-lg;
+    }
+    
+    .item-list-remove-button {
+        @apply p-2 rounded-lg bg-red-500 text-white hover:bg-red-600;
+    }
+    
+    .item-list-add-button {
+        @apply p-2 rounded-lg bg-green-500 text-white hover:bg-green-600;
     }
 }

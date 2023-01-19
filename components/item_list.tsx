@@ -41,39 +41,26 @@ export class ItemList extends Component<ItemListProps, ItemListState> {
 
     render() {
         return <>
-            <div className="flex flex-wrap">
+            <div className="item-list">
                 {this.props.items.map((item, index) => (
-                <div key={index} className="w-full">
-                    <input
-                        className="custom-form-input"
-                        value={item}
-                        onChange={event => this.handleUpdateItem(index, event.target.value)}
-                    />
-                    <button
-                        className="custom-form-button custom-form-button-secondary"
-                        onClick={() => this.handleRemoveItem(index)}
-                    >
-                        Remove
-                    </button>
-                </div>
+                    <div key={index} className="item-list-item">
+                        <input
+                            className="item-list-input"
+                            value={item}
+                            onChange={e => this.handleUpdateItem(index, e.target.value)}
+                        />
+                        <button
+                            className="item-list-remove-button"
+                            onClick={() => this.handleRemoveItem(index)}
+                        >
+                            Remove
+                        </button>
+                    </div>
                 ))}
-            </div>
-            <div className="flex w-full">
-                <input
-                    className="custom-form-input"
-                    id="newItem"
-                    name="newItem"
-                    type="text"
-                    value={this.state.newItem}
-                    onChange={event => this.setState({ newItem: event.target.value })}
-                />
-                <button
-                    className="custom-form-button custom-form-button-primary"
-                    onClick={() => this.handleAddItem(this.state.newItem)}
-                >
+                <button className="item-list-add-button" onClick={() => this.handleAddItem("")}>
                     Add
                 </button>
-          </div>
+            </div>
         </>;
     }
 }
