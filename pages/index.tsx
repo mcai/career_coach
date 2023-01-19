@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React from "react";
-import { CoachDetails, CoachResult, exampleDetailsList } from "./details";
+import { CoachDetails, CoachResult, exampleDetailsList } from "../models/details";
+import { ItemList } from "../components/item_list";
 
 export interface IndexProps {
 }
@@ -19,12 +20,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       details: {
         gender: "",
         age: "",
-        country: "",
-        currentJob: "",
-        educationExperience: "",
-        workExperience: "",
-        hobbies: "",
-        interests: "",
+        experience: [],
+        skills: [],
+        interests: [],
       },
       result: [],
       submitting: false,
@@ -35,11 +33,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setState({ details: exampleDetailsList[0] });
   }
 
-  handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
+  handleChange(name: string, value: any) {
     this.setState({
       details: {
         ...this.state.details,
@@ -48,19 +42,20 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     });
   }
 
+  handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.target;
+    const name = target.name;
+    const value = target.value;
+    
+    this.handleChange(name, value);
+  }
+
   handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
-    console.log(`name: ${name}, value: ${value}`);
-
-    this.setState({
-      details: {
-        ...this.state.details,
-        [name]: value,
-      }
-    });
+    
+    this.handleChange(name, value);
   }
 
   async handleSubmit(event: any) {
@@ -156,78 +151,22 @@ export default class Index extends React.Component<IndexProps, IndexState> {
             </div>
           </div>
 
-          <div className="custom-form-group">
-            <div className="custom-form-group-half">
-              <label className="custom-form-label" htmlFor="country">Country</label>
-              <select
-                className="custom-form-select"
-                id="country"
-                name="country"
-                value={this.state.details.country}
-                onChange={event => this.handleSelectChange(event)}
-              >
-                <option value="United States">United States</option>
-                <option value="Canada">Canada</option>
-                <option value="Mexico">Mexico</option>
-              </select>
-            </div>
-
-            <div className="custom-form-group-half">
-              <label className="custom-form-label" htmlFor="currentJob">Current Job</label>
-              <select
-                className="custom-form-select"
-                id="currentJob"
-                name="currentJob"
-                value={this.state.details.currentJob}
-                onChange={event => this.handleSelectChange(event)}
-              >
-                <option value="Software Developer">Software Developer</option>
-                <option value="Hardware Developer">Hardware Developer</option>
-                <option value="Designer">Designer</option>
-                <option value="Manager">Manager</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <label className="custom-form-label" htmlFor="educationExperience">Educational Experiences</label>
-          <input
-            className="custom-form-input"
-            id="educationExperience"
-            name="educationExperience"
-            type="text"
-            value={this.state.details.educationExperience}
-            onChange={event => this.handleInputChange(event)}
+          <label className="custom-form-label">Skills</label>
+          <ItemList 
+            items={this.state.details.skills}
+            onChange={skills => this.handleChange("skills", skills)}
           />
 
-          <label className="custom-form-label" htmlFor="workExperience">Work Experiences</label>
-          <input
-            className="custom-form-input"
-            id="workExperience"
-            name="workExperience"
-            type="text"
-            value={this.state.details.workExperience}
-            onChange={event => this.handleInputChange(event)}
+          <label className="custom-form-label">Experience</label>
+          <ItemList 
+            items={this.state.details.experience}
+            onChange={experience => this.handleChange("experience", experience)}
           />
 
-          <label className="custom-form-label" htmlFor="hobbies">Hobbies</label>
-          <input
-            className="custom-form-input"
-            id="hobbies"
-            name="hobbies"
-            type="text"
-            value={this.state.details.hobbies}
-            onChange={event => this.handleInputChange(event)}
-          />
-
-          <label className="custom-form-label" htmlFor="interests">Interests</label>
-          <input
-            className="custom-form-input"
-            id="interests"
-            name="interests"
-            type="text"
-            value={this.state.details.interests}
-            onChange={event => this.handleInputChange(event)}
+          <label className="custom-form-label">Interests</label>
+          <ItemList 
+            items={this.state.details.interests}
+            onChange={interests => this.handleChange("interests", interests)}
           />
 
           <button type="submit" className="custom-form-button custom-form-button-primary" disabled={this.state.submitting}>
@@ -244,11 +183,11 @@ export default class Index extends React.Component<IndexProps, IndexState> {
             {this.state.result?.map((job, index) => (
               <li key={index} id={`result-${index}`}>
                 <p className="font-medium">{job.name}</p>
-                <p className="text-gray-600">Monthly Salary: {job.requirements.monthlySalaryLowInDollar} - {job.requirements.monthlySalaryHighInDollar}</p>
-                <p className="text-gray-600">Degree: {job.requirements.degree}</p>
-                <p className="text-gray-600">Responsibility: {job.requirements.responsibility}</p>
-                <p className="text-gray-600">Experience: {job.requirements.experience}</p>
-                <p className="text-gray-600">Skills: {job.requirements.skills?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Monthly Salary: {job.monthlySalaryLowInDollar} - {job.monthlySalaryHighInDollar}</p>
+                <p className="text-gray-600">Degree: {job.degree}</p>
+                <p className="text-gray-600">Responsibility: {job.responsibility?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Skills: {job.skills?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Experience: {job.experience?.join(", ") ?? ""}</p>
                 <p className="text-gray-600">Related Companies: {job.relatedCompanies?.join(", ") ?? ""}</p>
                 <p className="text-gray-600">Related Products: {job.relatedProducts?.join(", ") ?? ""}</p>
                 <p className="text-gray-600">Interview Questions: {job.interviewQuestions?.join(", ") ?? ""}</p>

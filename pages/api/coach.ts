@@ -3,7 +3,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
-import { CoachDetails, CoachResult } from "../details";
+import { CoachDetails, CoachResult } from "../../models/details";
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -37,9 +37,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const resultStr = response.data.choices[0].text;
 
-        const result: CoachResult[] = JSON.parse(resultStr || "[]");
-
         console.log(`result: ${resultStr}`);
+
+        const result: CoachResult[] = JSON.parse(resultStr || "[]");
 
         res.status(200).json({ result: result });
     } catch (error: any) {
@@ -59,8 +59,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 function generatePrompt(details: CoachDetails) {
-    const input = `I'll give you a JSON string describing my personal profile (gender:string, age:string, country:string, currentJob:string, educationExperience:string, workExperience:string, hobbies:string, interests:string).`;
-    const expected_output = `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my qualifications (name:string, requirements:{monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string, experience:string; skills:string[]}, relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]).`;
+    const input = `I'll give you a JSON string describing my personal profile.`;
+    const expected_output = `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my qualifications (name:string, monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string[], skills:string[], experience:string[], relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]).`;
     const first_question = `Input:${JSON.stringify(details)}, output:`;
 
     return input + expected_output + first_question;
