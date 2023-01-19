@@ -3,6 +3,10 @@ import React from "react";
 import { CoachDetails, CoachJob as CoachJob, exampleDetailsList } from "../models/details";
 import { ItemList } from "../components/item_list";
 
+// TODO 1: cover letter
+// TODO 2: interview questions: q & a
+
+
 export interface IndexProps {
 }
 
@@ -114,6 +118,21 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
+  handleReset = () => {
+    this.setState({
+      details: {
+        gender: "",
+        age: "",
+        experience: [],
+        skills: [],
+        interests: [],
+      },
+      error: "",
+      submitting: false,
+      jobs: []
+    });
+  }
+
   render() {
     return (
       <div className="custom-form">
@@ -182,7 +201,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           <button 
             type="reset" 
             className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-secondary'} ml-2`} 
-            disabled={this.state.submitting}>
+            disabled={this.state.submitting}
+            onClick={this.handleReset}
+          >
             Reset
           </button>
         </form>
