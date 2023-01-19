@@ -72,12 +72,12 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       return;
     }
 
-    // set the submitting flag
-    this.setState({ submitting: true });
+    this.setState({ 
+      error: undefined,
+      jobs: [],
+      submitting: true,
+    });
 
-    // update the result
-    this.setState({ jobs: [] });
-  
     const response = await fetch("/api/coach", {
       method: "POST",
       headers: {
