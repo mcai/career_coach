@@ -1,3 +1,46 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+@layer components {
+    .custom-form {
+        @apply p-6;
+    }
+
+    .custom-header {
+        @apply text-2xl font-medium;
+    }
+
+    .custom-form-group {
+        @apply flex;
+    }
+
+    .custom-form-group-half {
+        @apply w-1/2 pr-2;
+    }
+
+    .custom-form-label {
+        @apply block font-medium text-gray-700;
+    }
+
+    .custom-form-select {
+        @apply bg-gray-200 rounded-lg p-2 w-full;
+    }
+
+    .custom-form-input {
+        @apply bg-gray-200 rounded-lg p-2 w-full;
+    }
+
+    .custom-form-button {
+        @apply mt-4 p-2;
+    }
+    
+    .custom-form-button-primary {
+        @apply bg-indigo-500 text-white rounded-lg hover:bg-indigo-600;
+    }
+
+    .custom-form-button-secondary {
+        @apply bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400;
+    }
+}
+  

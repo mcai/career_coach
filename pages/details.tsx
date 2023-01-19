@@ -2,7 +2,7 @@ export interface CoachDetails {
   gender: string;
   age: string;
   country: string;
-  career: string;
+  currentJob: string;
   educationExperience: string;
   workExperience: string;
   hobbies: string;
@@ -14,7 +14,7 @@ export const exampleDetailsList: CoachDetails[] = [
     gender: 'Female',
     age: '25',
     country: 'United States',
-    career: 'Software Developer',
+    currentJob: 'Software Developer',
     educationExperience: 'Bachelor of Computer Science from XYZ University',
     workExperience: '2 years of experience in web development',
     hobbies: 'reading, hiking, yoga',

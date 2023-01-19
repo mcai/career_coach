@@ -8,6 +8,7 @@ export interface IndexProps {
 export interface IndexState {
   details: CoachDetails;
   result: CoachResult[];
+  submitting: boolean;
 }
 
 export default class Index extends React.Component<IndexProps, IndexState> {
@@ -19,13 +20,14 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         gender: "",
         age: "",
         country: "",
-        career: "",
+        currentJob: "",
         educationExperience: "",
         workExperience: "",
         hobbies: "",
         interests: "",
       },
       result: [],
+      submitting: false,
     };
   }
 
@@ -33,7 +35,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setState({ details: exampleDetailsList[0] });
   }
 
-  handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -46,8 +48,33 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     });
   }
 
+  handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    console.log(`name: ${name}, value: ${value}`);
+
+    this.setState({
+      details: {
+        ...this.state.details,
+        [name]: value,
+      }
+    });
+  }
+
   async handleSubmit(event: any) {
     event.preventDefault();
+
+    if (this.state.submitting) {
+      return;
+    }
+
+    // set the submitting flag
+    this.setState({ submitting: true });
+
+    // update the result
+    this.setState({ result: [] });
   
     const response = await fetch("/api/coach", {
       method: "POST",
@@ -72,112 +99,150 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       // update the results
       this.setState({ result: data.error });
     }
-  
-    // clear the form
-    event.target.reset();
+    
+    // clear the submitting flag
+    this.setState({ submitting: false });
+
+    // scroll to the results
+    const results = document.getElementById("results");
+    if (results) {
+      results.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // focus on the results
+    const firstResult = document.getElementById("result-0");
+    if (firstResult) {
+      firstResult.focus();
+    }
   }
 
   render() {
     return (
-      <div className="p-6">
+      <div className="custom-form">
         <Head>
           <title>Career Coach</title>
         </Head>
 
-        <h3 className="text-2xl font-medium">
+        <h3 className="custom-header">
           Career Coach
         </h3>
 
-        <form className="mt-4" onSubmit={this.handleSubmit.bind(this)}>
-          <label className="block font-medium text-gray-700" htmlFor="gender">Gender</label>
-          <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
-            id="gender"
-            name="gender"
-            type="text"
-            value={this.state.details.gender}
-            onChange={this.handleChange}
-          />
+        <form className="mt-4" onSubmit={event => this.handleSubmit(event)}>
+          <div className="custom-form-group">
+            <div className="custom-form-group-half">
+              <label className="custom-form-label" htmlFor="gender">Gender</label>
+              <select
+                className="custom-form-select"
+                id="gender"
+                name="gender"
+                value={this.state.details.gender}
+                onChange={event => this.handleSelectChange(event)}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
 
-          <label className="block font-medium text-gray-700" htmlFor="age">Age</label>
-          <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
-            id="age"
-            name="age"
-            type="text"
-            value={this.state.details.age}
-            onChange={this.handleChange}
-          />
+            <div className="custom-form-group-half">
+              <label className="custom-form-label" htmlFor="age">Age</label>
+              <input
+                className="custom-form-input"
+                id="age"
+                name="age"
+                type="number"
+                value={this.state.details.age}
+                onChange={event => this.handleInputChange(event)}
+              />
+            </div>
+          </div>
 
-          <label className="block font-medium text-gray-700" htmlFor="country">Country</label>
-          <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
-            id="country"
-            name="country"
-            type="text"
-            value={this.state.details.country}
-            onChange={this.handleChange}
-          />
+          <div className="custom-form-group">
+            <div className="custom-form-group-half">
+              <label className="custom-form-label" htmlFor="country">Country</label>
+              <select
+                className="custom-form-select"
+                id="country"
+                name="country"
+                value={this.state.details.country}
+                onChange={event => this.handleSelectChange(event)}
+              >
+                <option value="United States">United States</option>
+                <option value="Canada">Canada</option>
+                <option value="Mexico">Mexico</option>
+              </select>
+            </div>
 
-          <label className="block font-medium text-gray-700" htmlFor="career">Career</label>
-          <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
-            id="career"
-            name="career"
-            type="text"
-            value={this.state.details.career}
-            onChange={this.handleChange}
-          />
+            <div className="custom-form-group-half">
+              <label className="custom-form-label" htmlFor="currentJob">Current Job</label>
+              <select
+                className="custom-form-select"
+                id="currentJob"
+                name="currentJob"
+                value={this.state.details.currentJob}
+                onChange={event => this.handleSelectChange(event)}
+              >
+                <option value="Software Developer">Software Developer</option>
+                <option value="Hardware Developer">Hardware Developer</option>
+                <option value="Designer">Designer</option>
+                <option value="Manager">Manager</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
 
-          <label className="block font-medium text-gray-700" htmlFor="educationExperience">Educational Experiences</label>
+          <label className="custom-form-label" htmlFor="educationExperience">Educational Experiences</label>
           <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
+            className="custom-form-input"
             id="educationExperience"
             name="educationExperience"
             type="text"
             value={this.state.details.educationExperience}
-            onChange={this.handleChange}
+            onChange={event => this.handleInputChange(event)}
           />
 
-          <label className="block font-medium text-gray-700" htmlFor="workExperience">Work Experiences</label>
+          <label className="custom-form-label" htmlFor="workExperience">Work Experiences</label>
           <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
+            className="custom-form-input"
             id="workExperience"
             name="workExperience"
             type="text"
             value={this.state.details.workExperience}
-            onChange={this.handleChange}
+            onChange={event => this.handleInputChange(event)}
           />
 
-          <label className="block font-medium text-gray-700" htmlFor="hobbies">Hobbies</label>
+          <label className="custom-form-label" htmlFor="hobbies">Hobbies</label>
           <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
+            className="custom-form-input"
             id="hobbies"
             name="hobbies"
             type="text"
             value={this.state.details.hobbies}
-            onChange={this.handleChange}
+            onChange={event => this.handleInputChange(event)}
           />
 
-          <label className="block font-medium text-gray-700" htmlFor="interests">Interests</label>
+          <label className="custom-form-label" htmlFor="interests">Interests</label>
           <input
-            className="bg-gray-200 rounded-lg p-2 w-full"
+            className="custom-form-input"
             id="interests"
             name="interests"
             type="text"
             value={this.state.details.interests}
-            onChange={this.handleChange}
+            onChange={event => this.handleInputChange(event)}
           />
 
-          <button type="submit" className="mt-4 bg-indigo-500 text-white rounded-lg p-2 hover:bg-indigo-600">Submit</button>
-          <button type="reset" className="ml-2 mt-4 bg-gray-300 text-gray-800 rounded-lg p-2 hover:bg-gray-400">Clear</button>
+          <button type="submit" className="custom-form-button custom-form-button-primary" disabled={this.state.submitting}>
+            Submit
+          </button>
+          <button type="reset" className="custom-form-button custom-form-button-secondary ml-2" disabled={this.state.submitting}>
+            Clear
+          </button>
         </form>
 
         <div className="mt-6">
           <h3 className="text-lg font-medium">Recommended Job Positions</h3>
-          <ul className="text-gray-700 list-disc">
-            {this.state.result.map((job, index) => (
-              <li key={index}>
+          <ul className="text-gray-700 list-disc" id="results">
+            {this.state.result?.map((job, index) => (
+              <li key={index} id={`result-${index}`}>
                 <p className="font-medium">{job.name}</p>
                 <p className="text-gray-600">Monthly Salary: {job.requirements.monthlySalaryLowInDollar} - {job.requirements.monthlySalaryHighInDollar}</p>
                 <p className="text-gray-600">Degree: {job.requirements.degree}</p>
