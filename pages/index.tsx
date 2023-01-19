@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React from "react";
-import { CoachDetails, CoachResult, exampleDetailsList } from "../models/details";
+import { CoachDetails, CoachJob as CoachJob, exampleDetailsList } from "../models/details";
 import { ItemList } from "../components/item_list";
 
 export interface IndexProps {
@@ -8,7 +8,8 @@ export interface IndexProps {
 
 export interface IndexState {
   details: CoachDetails;
-  result: CoachResult[];
+  error?: any;
+  jobs: CoachJob[];
   submitting: boolean;
 }
 
@@ -24,13 +25,15 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         skills: [],
         interests: [],
       },
-      result: [],
+      error: undefined,
+      jobs: [],
       submitting: false,
     };
   }
 
   componentDidMount() {
-    this.setState({ details: exampleDetailsList[0] });
+    const randomIndex = Math.floor(Math.random() * exampleDetailsList.length);
+    this.setState({ details: exampleDetailsList[randomIndex] });
   }
 
   handleChange(name: string, value: any) {
@@ -69,7 +72,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setState({ submitting: true });
 
     // update the result
-    this.setState({ result: [] });
+    this.setState({ jobs: [] });
   
     const response = await fetch("/api/coach", {
       method: "POST",
@@ -81,18 +84,18 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       }),
     });
   
-    const data = await response.json();
+    const json = await response.json();
   
     if (response.status === 200) {
-      console.log("Success:", data);
+      console.log("Success:", json);
   
       // update the result
-      this.setState({ result: data.result });
+      this.setState({ jobs: json.jobs });
     } else {
-      console.error("Error:", data);
+      console.error("Error:", json);
 
       // update the results
-      this.setState({ result: data.error });
+      this.setState({ error: json.error });
     }
     
     // clear the submitting flag
@@ -118,9 +121,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           <title>Career Coach</title>
         </Head>
 
-        <h3 className="custom-header">
-          Career Coach
-        </h3>
+        <div className="flex justify-between">
+          <h3 className="custom-header">Career Coach</h3>
+          <button onClick={() => window.location.reload()} className="btn">Refresh</button>
+        </div>
 
         <form className="mt-4" onSubmit={event => this.handleSubmit(event)}>
           <div className="custom-form-group">
@@ -169,18 +173,26 @@ export default class Index extends React.Component<IndexProps, IndexState> {
             onChange={interests => this.handleChange("interests", interests)}
           />
 
-          <button type="submit" className="custom-form-button custom-form-button-primary" disabled={this.state.submitting}>
-            Submit
+          <button 
+            type="submit" 
+            className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+            disabled={this.state.submitting}>
+            {this.state.submitting ? `Submitting...` : `Submit`}
           </button>
-          <button type="reset" className="custom-form-button custom-form-button-secondary ml-2" disabled={this.state.submitting}>
-            Clear
+          <button 
+            type="reset" 
+            className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-secondary'} ml-2`} 
+            disabled={this.state.submitting}>
+            Reset
           </button>
         </form>
+
+        {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
 
         <div className="mt-6">
           <h3 className="text-lg font-medium">Recommended Job Positions</h3>
           <ul className="text-gray-700 list-disc" id="results">
-            {this.state.result?.map((job, index) => (
+            {this.state.jobs?.map((job, index) => (
               <li key={index} id={`result-${index}`}>
                 <p className="font-medium">{job.name}</p>
                 <p className="text-gray-600">Monthly Salary: {job.monthlySalaryLowInDollar} - {job.monthlySalaryHighInDollar}</p>

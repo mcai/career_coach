@@ -3,7 +3,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
-import { CoachDetails, CoachResult } from "../../models/details";
+import { CoachDetails, CoachJob } from "../../models/details";
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -39,19 +39,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         console.log(`result: ${resultStr}`);
 
-        const result: CoachResult[] = JSON.parse(resultStr || "[]");
+        const jobs: CoachJob[] = JSON.parse(resultStr || "[]");
 
-        res.status(200).json({ result: result });
+        res.status(200).json({ 
+            jobs: jobs
+        });
     } catch (error: any) {
         if (error.response) {
             console.error(error.response.status, error.response.data);
-            res.status(error.response.status).json(error.response.data);
+            res.status(error.response.status).json({
+                error: error.response.data
+            });
         } else {
             console.error(`Error with OpenAI API request: ${error.message}`);
             res.status(500).json({ 
-                error: {
-                    message: `An error occurred during the request to OpenAI: ${error.message}`,
-                }
+                error: `An error occurred during the request to OpenAI: ${error.message}`
             });
         }
     }

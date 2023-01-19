@@ -3,6 +3,12 @@
 @import "tailwindcss/utilities";
 
 @layer components {
+    .error-message{
+        color: red;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
     .custom-form {
         @apply p-6 bg-gray-100;
     }
@@ -41,6 +47,12 @@
 
     .custom-form-button-secondary {
         @apply bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400;
+    }
+
+    .disabled-button {
+        background-color: gray;
+        cursor: not-allowed;
+        @apply text-white rounded-lg;
     }
 
     .item-list {
