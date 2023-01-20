@@ -49,12 +49,14 @@ export class ItemList extends Component<ItemListProps, ItemListState> {
                             value={item}
                             onChange={e => this.handleUpdateItem(index, e.target.value)}
                         />
-                        <button
-                            className="item-list-remove-button"
-                            onClick={() => this.handleRemoveItem(index)}
-                        >
-                            Remove
-                        </button>
+                        <div className="ml-2">
+                            <button
+                                className="item-list-remove-button"
+                                onClick={() => this.handleRemoveItem(index)}
+                            >
+                                Remove
+                            </button>
+                        </div>
                     </div>
                 ))}
                 <button className="item-list-add-button" onClick={() => this.handleAddItem("")}>
