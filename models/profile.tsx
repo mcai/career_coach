@@ -1,4 +1,4 @@
-export interface CoachDetails {
+export interface CoachProfile {
   gender: string;
   age: string;
   skills: string[];
@@ -6,7 +6,7 @@ export interface CoachDetails {
   interests: string[];
 }
 
-export const exampleDetailsList: CoachDetails[] = [
+export const exampleProfilesList: CoachProfile[] = [
   {
     gender: 'Female',
     age: '25',
@@ -111,16 +111,3 @@ export const exampleDetailsList: CoachDetails[] = [
     ]
   }
 ];
-
-export interface CoachJob {
-  name: string;
-  monthlySalaryLowInDollar: number;
-  monthlySalaryHighInDollar: number;
-  degree: string;
-  responsibility: string[];
-  skills: string[];
-  experience: string[];
-  relatedCompanies: string[];
-  relatedProducts: string[];
-  interviewQuestions: string[];
-}

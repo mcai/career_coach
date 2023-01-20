@@ -3,7 +3,8 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
-import { CoachDetails, CoachJob } from "../../models/details";
+import { CoachProfile } from "../../models/profile";
+import { CoachJob } from "../../models/job";
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -16,15 +17,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return;
     }
 
-    const { details } = req.body;
+    const { profile } = req.body;
     
-    if (!details) {
-        res.status(400).json({ error: "Missing details" });
+    if (!profile) {
+        res.status(400).json({ error: "Missing profile" });
         return;
     }
 
     try {
-        const prompt = generatePrompt(details);
+        const prompt = generatePrompt(profile);
     
         console.log(`prompt: ${prompt}`);
 
@@ -60,10 +61,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 
-function generatePrompt(details: CoachDetails) {
+function generatePrompt(profile: CoachProfile) {
     const input = `I'll give you a JSON string describing my personal profile.`;
     const expected_output = `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my qualifications (name:string, monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, degree:string, responsibility:string[], skills:string[], experience:string[], relatedCompanies:string[], relatedProducts:string[], interviewQuestions:string[]). Surround keys with a pair of commas.`;
-    const first_question = `Input:${JSON.stringify(details)}, output:`;
+    const first_question = `Input:${JSON.stringify(profile)}, output:`;
 
     return input + expected_output + first_question;
 }

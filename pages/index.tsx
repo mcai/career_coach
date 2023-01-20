@@ -1,17 +1,17 @@
 import Head from "next/head";
 import React from "react";
-import { CoachDetails, CoachJob as CoachJob, exampleDetailsList } from "../models/details";
+import { CoachProfile, exampleProfilesList } from "../models/profile";
+import { CoachJob } from "../models/job";
 import { ItemList } from "../components/item_list";
 
 // TODO 1: cover letter
 // TODO 2: interview questions: q & a
 
-
 export interface IndexProps {
 }
 
 export interface IndexState {
-  details: CoachDetails;
+  profile: CoachProfile;
   error?: any;
   jobs: CoachJob[];
   submitting: boolean;
@@ -22,7 +22,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     super(props);
 
     this.state = {
-      details: {
+      profile: {
         gender: "",
         age: "",
         experience: [],
@@ -36,17 +36,23 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   }
 
   componentDidMount() {
-    const randomIndex = Math.floor(Math.random() * exampleDetailsList.length);
-    this.setState({ details: exampleDetailsList[randomIndex] });
+    const savedProfile = JSON.parse(sessionStorage.getItem('profile') ?? "{}");
+    if (savedProfile) {
+      this.setState({ profile: savedProfile });
+    }
   }
 
   handleChange(name: string, value: any) {
+    const newProfile = {
+      ...this.state.profile,
+      [name]: value,
+    };
+
     this.setState({
-      details: {
-        ...this.state.details,
-        [name]: value,
-      }
+      profile: newProfile,
     });
+
+    sessionStorage.setItem('profile', JSON.stringify(newProfile));
   }
 
   handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -84,7 +90,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ 
-        details: this.state.details,
+        profile: this.state.profile,
       }),
     });
   
@@ -119,18 +125,30 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   }
 
   handleReset = () => {
+    const newProfile = {
+      gender: "",
+      age: "",
+      experience: [],
+      skills: [],
+      interests: [],
+    };
+
     this.setState({
-      details: {
-        gender: "",
-        age: "",
-        experience: [],
-        skills: [],
-        interests: [],
-      },
+      profile: newProfile,
       error: "",
       submitting: false,
       jobs: []
     });
+
+    sessionStorage.setItem('profile', JSON.stringify(newProfile));
+  }
+
+  handleRandom() {
+    const randomIndex = Math.floor(Math.random() * exampleProfilesList.length);
+    const newProfile = exampleProfilesList[randomIndex];
+    this.setState({ profile: newProfile });
+
+    sessionStorage.setItem('profile', JSON.stringify(newProfile));
   }
 
   render() {
@@ -142,7 +160,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
         <div className="flex justify-between">
           <h3 className="custom-header">Career Coach</h3>
-          <button onClick={() => window.location.reload()} className="btn">Refresh</button>
+          <button onClick={() => this.handleRandom()} className="btn">Random</button>
         </div>
 
         <form className="mt-4" onSubmit={event => this.handleSubmit(event)}>
@@ -153,7 +171,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
                 className="custom-form-select"
                 id="gender"
                 name="gender"
-                value={this.state.details.gender}
+                value={this.state.profile.gender}
                 onChange={event => this.handleSelectChange(event)}
               >
                 <option value="Male">Male</option>
@@ -168,7 +186,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
                 id="age"
                 name="age"
                 type="number"
-                value={this.state.details.age}
+                value={this.state.profile.age}
                 onChange={event => this.handleInputChange(event)}
               />
             </div>
@@ -176,19 +194,19 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
           <label className="custom-form-label">Skills</label>
           <ItemList 
-            items={this.state.details.skills}
+            items={this.state.profile.skills}
             onChange={skills => this.handleChange("skills", skills)}
           />
 
           <label className="custom-form-label">Experience</label>
           <ItemList 
-            items={this.state.details.experience}
+            items={this.state.profile.experience}
             onChange={experience => this.handleChange("experience", experience)}
           />
 
           <label className="custom-form-label">Interests</label>
           <ItemList 
-            items={this.state.details.interests}
+            items={this.state.profile.interests}
             onChange={interests => this.handleChange("interests", interests)}
           />
 

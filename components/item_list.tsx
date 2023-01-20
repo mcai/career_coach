@@ -42,7 +42,7 @@ export class ItemList extends Component<ItemListProps, ItemListState> {
     render() {
         return <>
             <div className="item-list">
-                {this.props.items.map((item, index) => (
+                {this.props.items?.map((item, index) => (
                     <div key={index} className="item-list-item">
                         <input
                             className="item-list-input"
