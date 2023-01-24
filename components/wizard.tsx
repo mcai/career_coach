@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface WizardProps {
-    steps: Array<{title: string, component: React.ReactNode}>;
+    steps: {title: string, component: React.ReactNode}[];
     stepIndex: number;
     setStepIndex: (stepIndex: number) => void;
     onComplete: () => void;
