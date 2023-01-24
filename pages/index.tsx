@@ -100,7 +100,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ 
-        {}
+        profile: this.state.profile,
       }),
     });
   
