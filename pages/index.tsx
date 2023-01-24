@@ -16,6 +16,7 @@ export interface IndexState {
   profile: CoachProfile;
   error?: any;
   jobs: CoachJob[];
+  selectedJobIndex?: number;
   submitting: boolean;
 }
 
@@ -35,6 +36,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       },
       error: undefined,
       jobs: [],
+      selectedJobIndex: undefined,
       submitting: false,
     };
   }
@@ -78,6 +80,11 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     const name = target.name;
     
     this.handleChange(name, value);
+  }
+
+  // function to handle changes to the radio fields
+  handleJobSelectionIndexChange = (index: number) => {
+    this.setState({ selectedJobIndex: index });
   }
 
   // function to handle the form submission
@@ -268,6 +275,17 @@ export default class Index extends React.Component<IndexProps, IndexState> {
                 <p className="text-gray-600">Related Companies: {job.relatedCompanies?.join(", ") ?? ""}</p>
                 <p className="text-gray-600">Related Products: {job.relatedProducts?.join(", ") ?? ""}</p>
                 <p className="text-gray-600">Interview Questions: {job.interviewQuestions?.join(", ") ?? ""}</p>
+                <div className="mt-2">
+                  <input 
+                    type="radio" 
+                    name="selectedJobIndex" 
+                    value={index} 
+                    id={`job-${index}`} 
+                    onChange={event => this.handleJobSelectionIndexChange(parseInt(event.target.value))}
+                    checked={this.state.selectedJobIndex === index}
+                  />
+                  <label className="ml-2" htmlFor={`job-${index}`}>Select</label>
+                </div>
               </li>
             ))}
           </ul>
