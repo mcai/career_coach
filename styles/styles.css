@@ -25,6 +25,10 @@
         @apply w-1/2 pr-2;
     }
 
+    .custom-form-group-one-third {
+        @apply w-1/3 pr-2;
+    }
+
     .custom-form-label {
         @apply block font-medium text-gray-700;
     }

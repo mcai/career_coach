@@ -1,6 +1,7 @@
 export interface CoachProfile {
+  name: string;
   gender: string;
-  age: string;
+  age: number;
   skills: string[];
   experience: string[];
   interests: string[];
@@ -8,8 +9,9 @@ export interface CoachProfile {
 
 export const exampleProfilesList: CoachProfile[] = [
   {
+    name: 'John Doe',
     gender: 'Female',
-    age: '25',
+    age: 25,
     skills: [
       'C++',
       'Java', 
@@ -25,8 +27,9 @@ export const exampleProfilesList: CoachProfile[] = [
     ]
   },
   {
+    name: 'Jane Doe',
     gender: 'Male',
-    age: '32',
+    age: 32,
     skills: [
       'JavaScript',
       'React',
@@ -43,8 +46,9 @@ export const exampleProfilesList: CoachProfile[] = [
     ]
   },
   {
+    name: 'John Smith',
     gender: 'Female',
-    age: '38',
+    age: 38,
     skills: [
       'C#',
       'ASP.NET', 
@@ -60,8 +64,9 @@ export const exampleProfilesList: CoachProfile[] = [
     ]
   },
   {
+    name: 'Jane Smith',
     gender: 'Male',
-    age: '27',
+    age: 27,
     skills: [
       'Java',
       'Spring', 
@@ -77,8 +82,9 @@ export const exampleProfilesList: CoachProfile[] = [
     ]
   },
   {
+    name: 'John Doe',
     gender: 'Female',
-    age: '31',
+    age: 31,
     skills: [
       'Java',
       'Android', 
@@ -94,8 +100,9 @@ export const exampleProfilesList: CoachProfile[] = [
     ]
   },
   {
+    name: 'Jane Doe',
     gender: 'Male',
-    age: '35',
+    age: 35,
     skills: [
       'PHP',
       'Laravel', 
