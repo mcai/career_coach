@@ -39,9 +39,7 @@ export async function openAiRequest(req: NextApiRequest, res: NextApiResponse, p
 
         const result = parseResult(resultStr);
 
-        res.status(200).json({ 
-            result
-        });
+        res.status(200).json(result);
     } catch (error: any) {
         if (error.response) {
             console.error(error.response.status, error.response.data);

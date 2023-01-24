@@ -17,7 +17,9 @@ function generatePrompt(input: {
 // Parse the result from OpenAI's GPT-3
 function parseResult(result: string | undefined) {
     const jobs: CoachJob[] = JSON.parse(result || "[]");
-    return jobs;
+    return {
+        jobs: jobs,
+    };
 }
 
 // POST /api/jobs

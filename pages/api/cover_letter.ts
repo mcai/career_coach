@@ -18,8 +18,10 @@ function generatePrompt(input: {
 
 // Parse the result from OpenAI's GPT-3
 function parseResult(result: string | undefined) {
-    const resume: CoachCoverLetter = JSON.parse(result || "{}");
-    return resume;
+    const coverLetter: CoachCoverLetter = JSON.parse(result || "{}");
+    return {
+        coverLetter: coverLetter,
+    };
 }
 
 // POST /api/resume
