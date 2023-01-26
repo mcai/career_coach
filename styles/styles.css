@@ -87,6 +87,14 @@
         @apply bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400;
     }
 
+    .random-button {
+        @apply bg-green-500 text-white font-medium py-2 px-4 rounded-md;
+    }
+      
+    .reset-button {
+    @apply bg-red-500 text-white font-medium py-2 px-4 rounded-md;
+    }
+
     .disabled-button {
         background-color: gray;
         cursor: not-allowed;
@@ -98,7 +106,7 @@
     }
     
     .item-list-item {
-        @apply flex items-center justify-between p-2 border-b-2 border-gray-200;
+        @apply flex items-center justify-between p-2;
     }
     
     .item-list-input {

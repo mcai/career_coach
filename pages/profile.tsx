@@ -2,36 +2,24 @@ import Head from "next/head";
 import React from "react";
 import { CoachProfile, exampleProfilesList } from "../models/profile";
 import { ItemList } from "../components/item_list";
-import { CoachJob } from "../models/job";
 
 // properties for the ProfilePage component
 export interface ProfilePageProps {
-    stepIndex: number;
-    setStepIndex: (stepIndex: number) => void;
     profile: CoachProfile;
     setProfile: (profile: CoachProfile) => void;
-    setJobs: (jobs: CoachJob[]) => void;
 }
 
 // state for the ProfilePage component
 export interface ProfilePageState {
-    error?: any;
-    submitting: boolean;
 }
 
 // the ProfilePage component
-export default class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
+export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
   constructor(props: ProfilePageProps) {
     super(props);
 
     this.state = {
-      error: undefined,
-      submitting: false,
     };
-  }
-
-  // function to be called when the component is mounted
-  componentDidMount() {
   }
 
   // function to handle changes to the profile
@@ -60,53 +48,6 @@ export default class ProfilePage extends React.Component<ProfilePageProps, Profi
     const name = target.name;
     
     this.handleChange(name, value);
-  }
-
-  // function to handle the form submission
-  async handleSubmit(event: any) {
-    event.preventDefault();
-
-    if (this.state.submitting) {
-      return;
-    }
-
-    this.setState({ 
-      error: undefined,
-      submitting: true,
-    });
-
-    const response = await fetch("/api/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-        profile: this.props.profile,
-      }),
-    });
-  
-    const json = await response.json();
-  
-    if (response.status === 200) {
-      console.log("Success:", json);
-  
-      // update the result
-      this.props.setJobs(json.jobs);
-    
-      // clear the submitting flag
-      this.setState({ submitting: false });
-
-      // move to the next step
-      this.props.setStepIndex(this.props.stepIndex + 1);
-    } else {
-      console.error("Error:", json);
-
-      // update the results
-      this.setState({ error: json.error });
-    
-      // clear the submitting flag
-      this.setState({ submitting: false });
-    }
   }
 
   // function to handle the reset button
@@ -146,10 +87,13 @@ export default class ProfilePage extends React.Component<ProfilePageProps, Profi
 
         <div className="flex justify-between">
           <h3 className="custom-header">Career Coach</h3>
-          <button onClick={() => this.handleRandom()} className="btn">Random</button>
+          <div>
+            <button onClick={() => this.handleRandom()} className="random-button mx-2">Random</button>
+            <button onClick={() => this.handleReset()} className="reset-button">Reset</button>
+          </div>
         </div>
 
-        <form className="mt-4" onSubmit={event => this.handleSubmit(event)}>
+        <div className="mt-4">
           <div className="custom-form-group">
             <div className="custom-form-group-one-third">
               <label className="custom-form-label" htmlFor="name">Name</label>
@@ -207,24 +151,7 @@ export default class ProfilePage extends React.Component<ProfilePageProps, Profi
             items={this.props.profile.interests}
             onChange={interests => this.handleChange("interests", interests)}
           />
-
-          <button 
-            type="submit" 
-            className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
-            disabled={this.state.submitting}>
-            {this.state.submitting ? `Submitting...` : `Submit`}
-          </button>
-          <button 
-            type="reset" 
-            className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-secondary'} ml-2`} 
-            disabled={this.state.submitting}
-            onClick={this.handleReset}
-          >
-            Reset
-          </button>
-        </form>
-
-        {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
+        </div>
       </div>
     );
   }

@@ -3,8 +3,10 @@ import React from 'react';
 interface WizardProps {
     steps: {title: string, component: React.ReactNode}[];
     stepIndex: number;
-    setStepIndex: (stepIndex: number) => void;
+    handleNext: () => void;
+    handlePrevious: () => void;
     onComplete: () => void;
+    submitting: boolean;
 }
 
 interface WizardState {
@@ -22,13 +24,13 @@ export class Wizard extends React.Component<WizardProps, WizardState> {
 
     handleNext() {
         this.setState({ isLoading: true });
-        this.props.setStepIndex(this.props.stepIndex + 1);
+        this.props.handleNext();
         this.setState({ isLoading: false });
     }
 
     handlePrevious() {
         this.setState({ isLoading: true });
-        this.props.setStepIndex(this.props.stepIndex - 1);
+        this.props.handlePrevious();
         this.setState({ isLoading: false });
     }
 
@@ -42,9 +44,27 @@ export class Wizard extends React.Component<WizardProps, WizardState> {
                     { this.props.steps[this.props.stepIndex].component }
                 </div>
                 <div className="wizard-navigation-buttons">
-                    {this.props.stepIndex !== 0 && <button onClick={() => this.handlePrevious()}>Previous</button>}
-                    {this.props.stepIndex !== this.props.steps.length - 1 && <button onClick={() => this.handleNext()}>Next</button>}
-                    {this.props.stepIndex === this.props.steps.length - 1 && <button onClick={() => this.props.onComplete()}>Complete</button>}
+                    {this.props.stepIndex !== 0 && <button
+                        className={`custom-form-button ${this.props.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                        disabled={this.props.submitting}
+                        onClick={() => this.handlePrevious()}
+                    >
+                        Previous
+                    </button>}
+                    {this.props.stepIndex !== this.props.steps.length - 1 && <button
+                        className={`custom-form-button ${this.props.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                        disabled={this.props.submitting}
+                        onClick={() => this.handleNext()}
+                    >
+                        Next
+                    </button>}
+                    {this.props.stepIndex === this.props.steps.length - 1 && <button 
+                        className={`custom-form-button ${this.props.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                        disabled={this.props.submitting}
+                        onClick={() => this.props.onComplete()}
+                    >
+                        Complete
+                    </button>}
                 </div>
                 {this.state.isLoading && <div className="wizard-loading-indicator">Loading...</div>}
             </div>

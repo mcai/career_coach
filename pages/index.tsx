@@ -3,9 +3,10 @@ import React from "react";
 import { Wizard } from "../components/wizard";
 import { CoachJob } from "../models/job";
 import { CoachProfile } from "../models/profile";
-import { CoachResume } from "../models/resume";
-import JobsPage from "./jobs";
-import ProfilePage from "./profile";
+import { CoachCoverLetter } from "../models/cover_letter";
+import { JobsPage } from "./jobs";
+import { ProfilePage } from "./profile";
+import { CoverLetterPage } from "./cover_letter";
 
 // properties for the Index component
 export interface IndexProps {
@@ -16,8 +17,10 @@ export interface IndexState {
   stepIndex: number;
   profile: CoachProfile;
   jobs: CoachJob[];
-  selectedJobIndex: number | undefined;
-  resume: CoachResume | undefined;
+  selectedJobIndex?: number;
+  coverLetter?: CoachCoverLetter;
+  error?: any;
+  submitting: boolean;
 }
 
 // the Index component
@@ -37,7 +40,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       },
       jobs: [],
       selectedJobIndex: undefined,
-      resume: undefined,
+      coverLetter: undefined,
+      error: undefined,
+      submitting: false,
     };
   }
 
@@ -50,8 +55,102 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  handleSetStepIndex(stepIndex: number) {
-    this.setState({ stepIndex });
+  async handleProfileSubmit() {
+    if (this.state.submitting) {
+      return;
+    }
+
+    this.setState({ 
+      error: undefined,
+      submitting: true,
+    });
+
+    const response = await fetch("/api/jobs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ 
+        profile: this.state.profile,
+      }),
+    });
+  
+    const json = await response.json();
+  
+    if (response.status === 200) {
+      console.log("Success:", json);
+  
+      // update the result
+      this.setState({ jobs: json.jobs });
+    
+      // clear the submitting flag
+      this.setState({ submitting: false });
+
+      // move to the next step
+      this.setState({ stepIndex: this.state.stepIndex + 1 });
+    } else {
+      console.error("Error:", json);
+
+      // update the results
+      this.setState({ error: json.error });
+    
+      // clear the submitting flag
+      this.setState({ submitting: false });
+    }
+  }
+
+  async handleJobsSubmit() {
+    if (this.state.submitting) {
+      return;
+    }
+
+    this.setState({ 
+      error: undefined,
+      submitting: true,
+    });
+
+    const response = await fetch("/api/cover_letter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        profile: this.state.profile,
+        job: this.state.jobs[this.state.selectedJobIndex || 0],
+      }),
+    });
+  
+    const json = await response.json();
+  
+    if (response.status === 200) {
+        console.log("Success:", json);
+  
+        // update the result
+        this.setState({ coverLetter: json.coverLetter });
+    } else {
+        console.error("Error:", json);
+
+        // update the results
+        this.setState({ error: json.error });
+    }
+    
+    // clear the submitting flag
+    this.setState({ submitting: false });
+  }
+
+  handleNext() {
+    switch(this.state.stepIndex) {
+      case 0:
+        this.handleProfileSubmit();
+        break;
+      case 1:
+        this.handleJobsSubmit();
+        break;
+    }
+  }
+
+  handlePrevious() {
+    this.setState({ stepIndex: this.state.stepIndex - 1 });
   }
 
   handleSetProfile(profile: CoachProfile) {
@@ -59,16 +158,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     sessionStorage.setItem('profile', JSON.stringify(profile));
   }
 
-  handleSetJobs(jobs: CoachJob[]) {
-    this.setState({ jobs });
-  }
-
   handleSetSelectedJobIndex(index: number | undefined) {
     this.setState({ selectedJobIndex: index });
-  }
-
-  handleSetResume(resume: CoachResume) {
-    this.setState({ resume });
   }
 
   // function to render the component
@@ -77,32 +168,23 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       { 
         title: 'Step 1 - Profile', 
         component: <ProfilePage
-          stepIndex={this.state.stepIndex}
-          setStepIndex={(stepIndex) => this.handleSetStepIndex(stepIndex)}
           profile={this.state.profile}
           setProfile={(profile) => this.handleSetProfile(profile)}
-          setJobs={(jobs) => this.handleSetJobs(jobs)}
         />
       },
       { 
-        title: 'Step 2', 
+        title: 'Step 2 - Jobs', 
         component: <JobsPage
-          stepIndex={this.state.stepIndex}
-          setStepIndex={( stepIndex) => this.handleSetStepIndex(stepIndex)}
-          profile={this.state.profile}
           jobs={this.state.jobs}
           selectedJobIndex={this.state.selectedJobIndex}
           setSelectedJobIndex={(index) => this.handleSetSelectedJobIndex(index)}
-          setResume={(resume) => this.handleSetResume(resume)}
         />
       },
       { 
-        title: 'Step 3', 
-        component: <h1>Step 3</h1> 
-      },
-      { 
-        title: 'Step 4', 
-        component: <h1>Step 4</h1> 
+        title: 'Step 3 - Cover Letter', 
+        component: <CoverLetterPage
+          coverLetter={this.state.coverLetter}
+        />
       },
     ];
 
@@ -115,9 +197,13 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         <Wizard 
           steps={steps} 
           onComplete={() => {}} 
-          stepIndex={this.state.stepIndex} 
-          setStepIndex={(stepIndex) => this.handleSetStepIndex(stepIndex)} 
+          stepIndex={this.state.stepIndex}
+          handleNext={() => this.handleNext()}
+          handlePrevious={() => this.handlePrevious()}
+          submitting={this.state.submitting}
         />
+
+        {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
       </div>
     );
   }
