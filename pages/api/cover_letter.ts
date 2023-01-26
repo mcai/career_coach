@@ -24,7 +24,7 @@ function parseResult(result: string | undefined) {
     };
 }
 
-// POST /api/resume
+// POST /api/cover_letter
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     return openAiRequest(req, res, generatePrompt, parseResult);
 }

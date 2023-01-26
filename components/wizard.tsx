@@ -38,7 +38,7 @@ export class Wizard extends React.Component<WizardProps, WizardState> {
         return (
             <div className="wizard">
                 <div className="wizard-step-indicator">
-                    Step {this.props.stepIndex + 1} of {this.props.steps.length}
+                    Step {this.props.stepIndex + 1} of {this.props.steps.length} - {this.props.steps[this.props.stepIndex].title}
                 </div>
                 <div className="wizard-step-content">
                     { this.props.steps[this.props.stepIndex].component }

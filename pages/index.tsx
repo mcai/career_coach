@@ -127,15 +127,21 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   
         // update the result
         this.setState({ coverLetter: json.coverLetter });
+    
+        // clear the submitting flag
+        this.setState({ submitting: false });
+
+        // move to the next step
+        this.setState({ stepIndex: this.state.stepIndex + 1 });
     } else {
         console.error("Error:", json);
 
         // update the results
         this.setState({ error: json.error });
-    }
     
-    // clear the submitting flag
-    this.setState({ submitting: false });
+        // clear the submitting flag
+        this.setState({ submitting: false });
+    }
   }
 
   handleNext() {
@@ -166,14 +172,14 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   render() {
     const steps: {title: string, component: React.ReactNode}[] = [
       { 
-        title: 'Step 1 - Profile', 
+        title: 'Profile', 
         component: <ProfilePage
           profile={this.state.profile}
           setProfile={(profile) => this.handleSetProfile(profile)}
         />
       },
       { 
-        title: 'Step 2 - Jobs', 
+        title: 'Jobs', 
         component: <JobsPage
           jobs={this.state.jobs}
           selectedJobIndex={this.state.selectedJobIndex}
@@ -181,7 +187,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         />
       },
       { 
-        title: 'Step 3 - Cover Letter', 
+        title: 'Cover Letter', 
         component: <CoverLetterPage
           coverLetter={this.state.coverLetter}
         />
