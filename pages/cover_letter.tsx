@@ -1,10 +1,9 @@
 import Head from "next/head";
 import React from "react";
-import { CoachCoverLetter } from "../models/cover_letter";
 
 // properties for the CoverLetterPage component
 export interface CoverLetterPageProps {
-    coverLetter?: CoachCoverLetter;
+    coverLetter?: string;
 }
 
 // state for the CoverLetterPage component
@@ -27,9 +26,11 @@ export class CoverLetterPage extends React.Component<CoverLetterPageProps, Cover
                 <Head>
                     <title>Cover Letter</title>
                 </Head>
-                <h1>Cover Letter</h1>
-                <p>Here is your cover letter:</p>
-                <pre>{this.props.coverLetter?.content ?? ""}</pre>
+                <textarea 
+                    value={(this.props.coverLetter ?? "").trim()} 
+                    readOnly 
+                    className="cover-letter-textarea h-full">
+                </textarea>
             </div>
         );
     };

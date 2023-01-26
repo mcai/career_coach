@@ -3,7 +3,6 @@ import React from "react";
 import { Wizard } from "../components/wizard";
 import { CoachJob } from "../models/job";
 import { CoachProfile } from "../models/profile";
-import { CoachCoverLetter } from "../models/cover_letter";
 import { JobsPage } from "./jobs";
 import { ProfilePage } from "./profile";
 import { CoverLetterPage } from "./cover_letter";
@@ -18,7 +17,7 @@ export interface IndexState {
   profile: CoachProfile;
   jobs: CoachJob[];
   selectedJobIndex?: number;
-  coverLetter?: CoachCoverLetter;
+  coverLetter?: string;
   error?: any;
   submitting: boolean;
 }
@@ -159,6 +158,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setState({ stepIndex: this.state.stepIndex - 1 });
   }
 
+  handleComplete() {
+    this.setState({ stepIndex: 0 });
+  }
+
   handleSetProfile(profile: CoachProfile) {
     this.setState({ profile });
     sessionStorage.setItem('profile', JSON.stringify(profile));
@@ -202,7 +205,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
         <Wizard 
           steps={steps} 
-          onComplete={() => {}} 
+          onComplete={() => this.handleComplete()}
           stepIndex={this.state.stepIndex}
           handleNext={() => this.handleNext()}
           handlePrevious={() => this.handlePrevious()}
