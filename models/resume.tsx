@@ -1,4 +1,4 @@
-export interface CoachProfile {
+export interface CoachResume {
   name: string;
   gender: string;
   age: number;
@@ -7,7 +7,7 @@ export interface CoachProfile {
   interests: string[];
 }
 
-export const exampleProfilesList: CoachProfile[] = [
+export const exampleResumesList: CoachResume[] = [
   {
     name: 'John Doe',
     gender: 'Female',

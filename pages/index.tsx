@@ -2,9 +2,9 @@ import Head from "next/head";
 import React from "react";
 import { Wizard } from "../components/wizard";
 import { CoachJob } from "../models/job";
-import { CoachProfile } from "../models/profile";
+import { CoachResume } from "../models/resume";
 import { JobsPage } from "./jobs";
-import { ProfilePage } from "./profile";
+import { ResumePage } from "./resume";
 import { CoverLetterPage } from "./cover_letter";
 
 // properties for the Index component
@@ -14,7 +14,7 @@ export interface IndexProps {
 // state for the Index component
 export interface IndexState {
   stepIndex: number;
-  profile: CoachProfile;
+  resume: CoachResume;
   jobs: CoachJob[];
   selectedJobIndex?: number;
   coverLetter?: string;
@@ -29,7 +29,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
     this.state = {
       stepIndex: 0,
-      profile: {
+      resume: {
         name: "John Doe",
         gender: "Male",
         age: 25,
@@ -47,14 +47,14 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
   // function to be called when the component is mounted
   componentDidMount() {
-    // load the profile from session storage
-    const savedProfile = JSON.parse(sessionStorage.getItem('profile') ?? "{}");
-    if (savedProfile) {
-      this.setState({ profile: savedProfile });
+    // load the resume from session storage
+    const savedResume = JSON.parse(sessionStorage.getItem('resume') ?? "{}");
+    if (savedResume) {
+      this.setState({ resume: savedResume });
     }
   }
 
-  async handleProfileSubmit() {
+  async handleResumeSubmit() {
     if (this.state.submitting) {
       return;
     }
@@ -70,7 +70,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ 
-        profile: this.state.profile,
+        resume: this.state.resume,
       }),
     });
   
@@ -114,7 +114,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        profile: this.state.profile,
+        resume: this.state.resume,
         job: this.state.jobs[this.state.selectedJobIndex || 0],
       }),
     });
@@ -146,7 +146,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   handleNext() {
     switch(this.state.stepIndex) {
       case 0:
-        this.handleProfileSubmit();
+        this.handleResumeSubmit();
         break;
       case 1:
         this.handleJobsSubmit();
@@ -162,9 +162,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setState({ stepIndex: 0 });
   }
 
-  handleSetProfile(profile: CoachProfile) {
-    this.setState({ profile });
-    sessionStorage.setItem('profile', JSON.stringify(profile));
+  handleSetResume(resume: CoachResume) {
+    this.setState({ resume: resume });
+    sessionStorage.setItem('resume', JSON.stringify(resume));
   }
 
   handleSetSelectedJobIndex(index: number | undefined) {
@@ -175,10 +175,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   render() {
     const steps: {title: string, component: React.ReactNode}[] = [
       { 
-        title: 'Profile', 
-        component: <ProfilePage
-          profile={this.state.profile}
-          setProfile={(profile) => this.handleSetProfile(profile)}
+        title: 'Resume', 
+        component: <ResumePage
+          resume={this.state.resume}
+          setResume={(resume) => this.handleSetResume(resume)}
         />
       },
       { 

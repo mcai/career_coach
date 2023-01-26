@@ -1,35 +1,35 @@
 import Head from "next/head";
 import React from "react";
-import { CoachProfile, exampleProfilesList } from "../models/profile";
+import { CoachResume, exampleResumesList } from "../models/resume";
 import { ItemList } from "../components/item_list";
 
-// properties for the ProfilePage component
-export interface ProfilePageProps {
-    profile: CoachProfile;
-    setProfile: (profile: CoachProfile) => void;
+// properties for the ResumePage component
+export interface ResumePageProps {
+    resume: CoachResume;
+    setResume: (resume: CoachResume) => void;
 }
 
-// state for the ProfilePage component
-export interface ProfilePageState {
+// state for the ResumePage component
+export interface ResumePageState {
 }
 
-// the ProfilePage component
-export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
-  constructor(props: ProfilePageProps) {
+// the ResumePage component
+export class ResumePage extends React.Component<ResumePageProps, ResumePageState> {
+  constructor(props: ResumePageProps) {
     super(props);
 
     this.state = {
     };
   }
 
-  // function to handle changes to the profile
+  // function to handle changes to the resume
   handleChange(name: string, value: any) {
-    const newProfile: CoachProfile = {
-      ...this.props.profile,
+    const newResume: CoachResume = {
+      ...this.props.resume,
       [name]: value,
     };
 
-    this.props.setProfile(newProfile);
+    this.props.setResume(newResume);
   }
 
   // function to handle changes to the input fields
@@ -52,7 +52,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
 
   // function to handle the reset button
   handleReset = () => {
-    const newProfile: CoachProfile = {
+    const newResume: CoachResume = {
       name: "John Doe",
       gender: "Male",
       age: 25,
@@ -66,15 +66,15 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
       submitting: false,
     });
 
-    this.props.setProfile(newProfile);
+    this.props.setResume(newResume);
   }
 
   // function to handle the random button
   handleRandom() {
-    const randomIndex = Math.floor(Math.random() * exampleProfilesList.length);
-    const newProfile = exampleProfilesList[randomIndex];
+    const randomIndex = Math.floor(Math.random() * exampleResumesList.length);
+    const newResume = exampleResumesList[randomIndex];
 
-    this.props.setProfile(newProfile);
+    this.props.setResume(newResume);
   }
 
   // function to render the component
@@ -102,7 +102,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
                 id="name"
                 name="name"
                 type="text"
-                value={this.props.profile.name}
+                value={this.props.resume.name}
                 onChange={event => this.handleInputChange(event)}
               />
             </div>
@@ -113,7 +113,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
                 className="custom-form-select"
                 id="gender"
                 name="gender"
-                value={this.props.profile.gender}
+                value={this.props.resume.gender}
                 onChange={event => this.handleSelectChange(event)}
               >
                 <option value="Male">Male</option>
@@ -128,7 +128,7 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
                 id="age"
                 name="age"
                 type="number"
-                value={this.props.profile.age}
+                value={this.props.resume.age}
                 onChange={event => this.handleInputChange(event)}
               />
             </div>
@@ -136,19 +136,19 @@ export class ProfilePage extends React.Component<ProfilePageProps, ProfilePageSt
 
           <label className="custom-form-label">Skills</label>
           <ItemList 
-            items={this.props.profile.skills}
+            items={this.props.resume.skills}
             onChange={skills => this.handleChange("skills", skills)}
           />
 
           <label className="custom-form-label">Experience</label>
           <ItemList 
-            items={this.props.profile.experience}
+            items={this.props.resume.experience}
             onChange={experience => this.handleChange("experience", experience)}
           />
 
           <label className="custom-form-label">Interests</label>
           <ItemList 
-            items={this.props.profile.interests}
+            items={this.props.resume.interests}
             onChange={interests => this.handleChange("interests", interests)}
           />
         </div>

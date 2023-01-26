@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { CoachProfile } from "../../models/profile";
+import { CoachResume } from "../../models/resume";
 import { CoachJob } from "../../models/job";
 import { openAiRequest } from "../../utils/openai"
 
 // Generate a prompt for OpenAI's GPT-3
 function generatePrompt(input: {
-    profile: CoachProfile,
+    resume: CoachResume,
     job: CoachJob,
 }) {
-    let prompt = `I'll give you JSON strings describing my personal profile, a job position and detailed resume.`;
-    prompt += `You are required to generate a string of a cover letter that both follows my potential career path and aligns with my profile, the job position and the detailed resume.`;
+    let prompt = `I'll give you JSON strings describing my personal resume and a job position.`;
+    prompt += `You are required to generate a string of a cover letter that both follows my potential career path and aligns with my resume and the job position.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;
