@@ -1,11 +1,12 @@
 import Head from "next/head";
 import React from "react";
-import { CoachResume, exampleResumesList } from "../models/resume";
+import { CoachResume } from "../models/resume";
 import { ItemList } from "../components/item_list";
 
 // properties for the ResumePage component
 export interface ResumePageProps {
     resume: CoachResume;
+    fetchResume: () => void;
     setResume: (resume: CoachResume) => void;
 }
 
@@ -71,10 +72,7 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
 
   // function to handle the random button
   handleRandom() {
-    const randomIndex = Math.floor(Math.random() * exampleResumesList.length);
-    const newResume = exampleResumesList[randomIndex];
-
-    this.props.setResume(newResume);
+    this.props.fetchResume();
   }
 
   // function to render the component

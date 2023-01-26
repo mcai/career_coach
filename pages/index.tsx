@@ -54,7 +54,47 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  async handleResumeSubmit() {
+  async fetchResume() {
+    if (this.state.submitting) {
+      return;
+    }
+
+    this.setState({
+      error: undefined,
+      submitting: true,
+    });
+
+    const response = await fetch("/api/resume", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      }),
+    });
+
+    const json = await response.json();
+
+    if (response.status === 200) {
+      console.log("Success:", json);
+
+      // update the result
+      this.setState({ resume: json.resume });
+
+      // clear the submitting flag
+      this.setState({ submitting: false });
+    } else {
+      console.error("Error:", json);
+
+      // update the results
+      this.setState({ error: json.error });
+
+      // clear the submitting flag
+      this.setState({ submitting: false });
+    }
+  }
+
+  async fetchJobs() {
     if (this.state.submitting) {
       return;
     }
@@ -98,7 +138,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  async handleJobsSubmit() {
+  async fetchCoverLetter() {
     if (this.state.submitting) {
       return;
     }
@@ -146,10 +186,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   handleNext() {
     switch(this.state.stepIndex) {
       case 0:
-        this.handleResumeSubmit();
+        this.fetchJobs();
         break;
       case 1:
-        this.handleJobsSubmit();
+        this.fetchCoverLetter();
         break;
     }
   }
@@ -178,6 +218,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         title: 'Resume', 
         component: <ResumePage
           resume={this.state.resume}
+          fetchResume={() => this.fetchResume()}
           setResume={(resume) => this.handleSetResume(resume)}
         />
       },
