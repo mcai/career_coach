@@ -1,12 +1,10 @@
 export interface CoachJob {
   name: string;
+  company: string;
   monthlySalaryLowInDollar: number;
   monthlySalaryHighInDollar: number;
-  degree: string;
+  requiredDegree: string;
   responsibility: string[];
-  skills: string[];
-  experience: string[];
-  relatedCompanies: string[];
-  relatedProducts: string[];
-  interviewQuestions: string[];
+  requiredSkills: string[];
+  requiredExperience: string[];
 }

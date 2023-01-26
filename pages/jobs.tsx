@@ -44,15 +44,12 @@ export class JobsPage extends React.Component<JobsPageProps, JobsPageState> {
           <ul className="text-gray-700 list-disc" id="results">
             {this.props.jobs?.map((job, index) => (
               <li key={index} id={`result-${index}`}>
-                <p className="font-medium">{job.name}</p>
+                <p className="font-medium">{job.name} at {job.company}</p>
                 <p className="text-gray-600">Monthly Salary: {job.monthlySalaryLowInDollar} - {job.monthlySalaryHighInDollar}</p>
-                <p className="text-gray-600">Degree: {job.degree}</p>
+                <p className="text-gray-600">Required Degree: {job.requiredDegree}</p>
                 <p className="text-gray-600">Responsibility: {job.responsibility?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Skills: {job.skills?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Experience: {job.experience?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Related Companies: {job.relatedCompanies?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Related Products: {job.relatedProducts?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Interview Questions: {job.interviewQuestions?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Required Skills: {job.requiredSkills?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Required Experience: {job.requiredExperience?.join(", ") ?? ""}</p>
                 <div className="mt-2">
                   <input 
                     type="radio" 
