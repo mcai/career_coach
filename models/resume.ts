@@ -4,6 +4,7 @@ export interface CoachResume {
   email: string;
   address: string;
   linkedIn: string;
-  experience: string[];
+  education: string[];
+  workExperience: string[];
   skills: string[];
 }

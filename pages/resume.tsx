@@ -59,7 +59,8 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
       email: "",
       address: "",
       linkedIn: "",
-      experience: [],
+      education: [],
+      workExperience: [],
       skills: [],
     };
 
@@ -147,10 +148,16 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
             </div>
           </div>
 
-          <label className="custom-form-label">Experience</label>
+          <label className="custom-form-label">Education</label>
           <ItemList 
-            items={this.props.resume.experience}
-            onChange={experience => this.handleChange("experience", experience)}
+            items={this.props.resume.education}
+            onChange={education => this.handleChange("education", education)}
+          />
+
+          <label className="custom-form-label">Work Experience</label>
+          <ItemList 
+            items={this.props.resume.workExperience}
+            onChange={workExperience => this.handleChange("workExperience", workExperience)}
           />
 
           <label className="custom-form-label">Skills</label>
