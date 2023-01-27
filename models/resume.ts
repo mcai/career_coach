@@ -3,6 +3,7 @@ export interface CoachResume {
   phoneNumber: string;
   email: string;
   address: string;
+  linkedIn: string;
   experience: string[];
   skills: string[];
 }

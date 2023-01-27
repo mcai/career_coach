@@ -6,7 +6,7 @@ import { openAiRequest } from "../../utils/openai"
 function generatePrompt(input: {
     resume: CoachResume,
 }) {
-    let prompt = `You are required to generate a JSON string of resume matching a random career (name:string, phoneNumber:string, email:string, address:string, experience:string[], skills:string[]). Surround keys with a pair of commas.`;
+    let prompt = `You are required to generate a JSON string of resume matching a random career (name:string, phoneNumber:string, email:string, address:string, linkedIn:string, experience:string[], skills:string[]). Surround keys with a pair of commas.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;

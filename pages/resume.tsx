@@ -58,6 +58,7 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
       phoneNumber: "",
       email: "",
       address: "",
+      linkedIn: "",
       experience: [],
       skills: [],
     };
@@ -124,13 +125,23 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
           </div>
 
           <div className="custom-form-group">
-            <div className="custom-form-group-full">
+            <div className="custom-form-group-half">
               <label className="custom-form-label" htmlFor="address">Address</label>
               <input
                 className="custom-form-input"
                 id="address"
                 name="address"
                 value={this.props.resume.address}
+                onChange={event => this.handleInputChange(event)}
+              />
+            </div>
+            <div className="custom-form-group-half">
+              <label className="custom-form-label" htmlFor="linkedIn">LinkedIn</label>
+              <input
+                className="custom-form-input"
+                id="linkedIn"
+                name="linkedIn"
+                value={this.props.resume.linkedIn}
                 onChange={event => this.handleInputChange(event)}
               />
             </div>

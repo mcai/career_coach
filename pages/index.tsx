@@ -34,6 +34,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         phoneNumber: "",
         email: "",
         address: "",
+        linkedIn: "",
         experience: [],
         skills: [],
       },
