@@ -1,11 +1,11 @@
 export interface CoachJob {
-  name: string;
+  title: string;
   company: string;
+  location: string;
   hiringManager: string;
-  monthlySalaryLowInDollar: number;
-  monthlySalaryHighInDollar: number;
-  requiredDegree: string;
+  description: string;
   responsibility: string[];
-  requiredSkills: string[];
-  requiredExperience: string[];
+  qualifications: string[];
+  salary: number;
+  type: string;
 }

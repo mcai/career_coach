@@ -40,17 +40,17 @@ export class JobsPage extends React.Component<JobsPageProps, JobsPageState> {
         </Head>
 
         <div className="mt-6">
-          <h3 className="text-lg font-medium">Recommended Job Positions</h3>
           <ul className="text-gray-700 list-disc" id="results">
             {this.props.jobs?.map((job, index) => (
               <li key={index} id={`result-${index}`}>
-                <p className="font-medium">{job.name} at {job.company}</p>
+                <p className="font-medium">{job.title} at {job.company}</p>
+                <p className="text-gray-600">Location: {job.location}</p>
                 <p className="text-gray-600">Hiring Manager: {job.hiringManager}</p>
-                <p className="text-gray-600">Monthly Salary: {job.monthlySalaryLowInDollar} - {job.monthlySalaryHighInDollar}</p>
-                <p className="text-gray-600">Required Degree: {job.requiredDegree}</p>
+                <p className="text-gray-600">Description: {job.description}</p>
                 <p className="text-gray-600">Responsibility: {job.responsibility?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Required Skills: {job.requiredSkills?.join(", ") ?? ""}</p>
-                <p className="text-gray-600">Required Experience: {job.requiredExperience?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Qualifications: {job.qualifications?.join(", ") ?? ""}</p>
+                <p className="text-gray-600">Salary: {job.salary}</p>
+                <p className="text-gray-600">Type: {job.type}</p>
                 <div className="mt-2">
                   <input 
                     type="radio" 

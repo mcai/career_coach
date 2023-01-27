@@ -8,7 +8,7 @@ function generatePrompt(input: {
     resume: CoachResume,
 }) {
     let prompt = `I'll give you a JSON string describing my personal resume.`;
-    prompt += `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my resume (name:string, company:string, hiringManager:string, monthlySalaryLowInDollar:number, monthlySalaryHighInDollar:number, requiredDegree:string, responsibility:string[], requiredSkills:string[], requiredExperience:string[]). Surround keys with a pair of commas.`;
+    prompt += `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my resume (title:string, company:string, location:string, hiringManager:string, description:string, responsibility:string[], qualifications:string[], salary:number, type:string). Surround keys with a pair of commas.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;
