@@ -3,7 +3,7 @@ import React from "react";
 import { Wizard } from "../components/wizard";
 import { CoachJob } from "../models/job";
 import { CoachResume } from "../models/resume";
-import { JobsPage } from "./jobs";
+import { JobPage } from "./job";
 import { ResumePage } from "./resume";
 import { CoverLetterPage } from "./cover_letter";
 
@@ -15,9 +15,8 @@ export interface IndexProps {
 export interface IndexState {
   stepIndex: number;
   resume: CoachResume;
-  jobs: CoachJob[];
-  selectedJobIndex?: number;
-  coverLetter?: string;
+  job: CoachJob;
+  coverLetter: string;
   error?: any;
   submitting: boolean;
 }
@@ -39,9 +38,18 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         workExperience: [],
         skills: [],
       },
-      jobs: [],
-      selectedJobIndex: undefined,
-      coverLetter: undefined,
+      job: {
+        title: "",
+        company: "",
+        location: "",
+        hiringManager: "",
+        description: "",
+        responsibility: [],
+        qualifications: [],
+        salary: 0,
+        type: "",
+      },
+      coverLetter: "",
       error: undefined,
       submitting: false,
     };
@@ -96,7 +104,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  async fetchJobs() {
+  async fetchJob() {
     if (this.state.submitting) {
       return;
     }
@@ -106,7 +114,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       submitting: true,
     });
 
-    const response = await fetch("/api/jobs", {
+    const response = await fetch("/api/job", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -122,7 +130,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       console.log("Success:", json);
   
       // update the result
-      this.setState({ jobs: json.jobs });
+      this.setState({ job: json.job });
     
       // clear the submitting flag
       this.setState({ submitting: false });
@@ -157,7 +165,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       },
       body: JSON.stringify({
         resume: this.state.resume,
-        job: this.state.jobs[this.state.selectedJobIndex || 0],
+        job: this.state.job,
       }),
     });
   
@@ -188,7 +196,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   handleNext() {
     switch(this.state.stepIndex) {
       case 0:
-        this.fetchJobs();
+        this.fetchJob();
         break;
       case 1:
         this.fetchCoverLetter();
@@ -209,10 +217,6 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     sessionStorage.setItem('resume', JSON.stringify(resume));
   }
 
-  handleSetSelectedJobIndex(index: number | undefined) {
-    this.setState({ selectedJobIndex: index });
-  }
-
   // function to render the component
   render() {
     const steps: {title: string, component: React.ReactNode}[] = [
@@ -225,11 +229,11 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         />
       },
       { 
-        title: 'Jobs', 
-        component: <JobsPage
-          jobs={this.state.jobs}
-          selectedJobIndex={this.state.selectedJobIndex}
-          setSelectedJobIndex={(index) => this.handleSetSelectedJobIndex(index)}
+        title: 'Job', 
+        component: <JobPage
+          job={this.state.job}
+          fetchJob={() => this.fetchJob()}
+          setJob={(job) => this.setState({ job: job })}
         />
       },
       { 

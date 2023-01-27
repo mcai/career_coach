@@ -7,8 +7,8 @@ import { openAiRequest } from "../../utils/openai"
 function generatePrompt(input: {
     resume: CoachResume,
 }) {
-    let prompt = `I'll give you a JSON string describing my personal resume.`;
-    prompt += `You are required to generate a JSON array of next job positions that both follows my potential career path and aligns with my resume (title:string, company:string, location:string, hiringManager:string, description:string, responsibility:string[], qualifications:string[], salary:number, type:string). Surround keys with a pair of commas.`;
+    let prompt = `I'll give you a JSON string describing my resume.`;
+    prompt += `You are required to generate a JSON string of next job position that both follows my potential career path and aligns with my resume (title:string, company:string, location:string, hiringManager:string, description:string, responsibility:string[], qualifications:string[], salary:number, type:string). Surround keys with a pair of commas.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;
@@ -16,13 +16,13 @@ function generatePrompt(input: {
 
 // Parse the result from OpenAI's GPT-3
 function parseResult(result: string | undefined) {
-    const jobs: CoachJob[] = JSON.parse(result || "[]");
+    const job: CoachJob = JSON.parse(result || "{}");
     return {
-        jobs: jobs,
+        job: job,
     };
 }
 
-// POST /api/jobs
+// POST /api/job
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     return openAiRequest(req, res, generatePrompt, parseResult);
 };

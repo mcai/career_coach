@@ -42,13 +42,9 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
     this.handleChange(name, value);
   }
 
-  // function to handle changes to the select fields
-  handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    
-    this.handleChange(name, value);
+  // function to handle the random button
+  handleRandom() {
+    this.props.fetchResume();
   }
 
   // function to handle the reset button
@@ -65,11 +61,6 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
     };
 
     this.props.setResume(newResume);
-  }
-
-  // function to handle the random button
-  handleRandom() {
-    this.props.fetchResume();
   }
 
   // function to render the component
