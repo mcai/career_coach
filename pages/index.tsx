@@ -62,6 +62,24 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     if (savedResume) {
       this.setState({ resume: savedResume });
     }
+
+    // load the job from session storage
+    const savedJob = JSON.parse(sessionStorage.getItem('job') ?? "{}");
+    if (savedJob) {
+      this.setState({ job: savedJob });
+    }
+
+    // load the cover letter from session storage
+    const savedCoverLetter = sessionStorage.getItem('coverLetter');
+    if (savedCoverLetter) {
+      this.setState({ coverLetter: savedCoverLetter });
+    }
+
+    // load the step index from session storage
+    const savedStepIndex = sessionStorage.getItem('stepIndex');
+    if (savedStepIndex) {
+      this.setState({ stepIndex: parseInt(savedStepIndex) });
+    }
   }
 
   async fetchResume() {
@@ -89,7 +107,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       console.log("Success:", json);
 
       // update the result
-      this.setState({ resume: json.resume });
+      this.setResume(json.resume);
 
       // clear the submitting flag
       this.setState({ submitting: false });
@@ -130,13 +148,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       console.log("Success:", json);
   
       // update the result
-      this.setState({ job: json.job });
+      this.setJob(json.job);
     
       // clear the submitting flag
       this.setState({ submitting: false });
-
-      // move to the next step
-      this.setState({ stepIndex: this.state.stepIndex + 1 });
     } else {
       console.error("Error:", json);
 
@@ -175,13 +190,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         console.log("Success:", json);
   
         // update the result
-        this.setState({ coverLetter: json.coverLetter });
+        this.setCoverLetter(json.coverLetter);
     
         // clear the submitting flag
         this.setState({ submitting: false });
-
-        // move to the next step
-        this.setState({ stepIndex: this.state.stepIndex + 1 });
     } else {
         console.error("Error:", json);
 
@@ -194,27 +206,35 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   }
 
   handleNext() {
-    switch(this.state.stepIndex) {
-      case 0:
-        this.fetchJob();
-        break;
-      case 1:
-        this.fetchCoverLetter();
-        break;
-    }
+    this.setStepIndex(this.state.stepIndex + 1);
   }
 
   handlePrevious() {
-    this.setState({ stepIndex: this.state.stepIndex - 1 });
+    this.setStepIndex(this.state.stepIndex - 1);
   }
 
   handleComplete() {
-    this.setState({ stepIndex: 0 });
+    this.setStepIndex(0);
   }
 
-  handleSetResume(resume: CoachResume) {
+  setResume(resume: CoachResume) {
     this.setState({ resume: resume });
     sessionStorage.setItem('resume', JSON.stringify(resume));
+  }
+
+  setJob(job: CoachJob) {
+    this.setState({ job: job });
+    sessionStorage.setItem('job', JSON.stringify(job));
+  }
+
+  setCoverLetter(coverLetter: string) {
+    this.setState({ coverLetter: coverLetter });
+    sessionStorage.setItem('coverLetter', coverLetter);
+  }
+
+  setStepIndex(stepIndex: number) {
+    this.setState({ stepIndex: stepIndex });
+    sessionStorage.setItem('stepIndex', stepIndex.toString());
   }
 
   // function to render the component
@@ -225,7 +245,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         component: <ResumePage
           resume={this.state.resume}
           fetchResume={() => this.fetchResume()}
-          setResume={(resume) => this.handleSetResume(resume)}
+          setResume={(resume) => this.setResume(resume)}
         />
       },
       { 
@@ -233,13 +253,15 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         component: <JobPage
           job={this.state.job}
           fetchJob={() => this.fetchJob()}
-          setJob={(job) => this.setState({ job: job })}
+          setJob={(job) => this.setJob(job)}
         />
       },
       { 
         title: 'Cover Letter', 
         component: <CoverLetterPage
           coverLetter={this.state.coverLetter}
+          fetchCoverLetter={() => this.fetchCoverLetter()}
+          setCoverLetter={(coverLetter) => this.setCoverLetter(coverLetter)}
         />
       },
     ];
