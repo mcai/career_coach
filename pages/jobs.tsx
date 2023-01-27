@@ -45,6 +45,7 @@ export class JobsPage extends React.Component<JobsPageProps, JobsPageState> {
             {this.props.jobs?.map((job, index) => (
               <li key={index} id={`result-${index}`}>
                 <p className="font-medium">{job.name} at {job.company}</p>
+                <p className="text-gray-600">Hiring Manager: {job.hiringManager}</p>
                 <p className="text-gray-600">Monthly Salary: {job.monthlySalaryLowInDollar} - {job.monthlySalaryHighInDollar}</p>
                 <p className="text-gray-600">Required Degree: {job.requiredDegree}</p>
                 <p className="text-gray-600">Responsibility: {job.responsibility?.join(", ") ?? ""}</p>

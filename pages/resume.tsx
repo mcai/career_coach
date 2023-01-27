@@ -52,20 +52,15 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
   }
 
   // function to handle the reset button
-  handleReset = () => {
+  handleReset() {
     const newResume: CoachResume = {
-      name: "John Doe",
-      gender: "Male",
-      age: 25,
+      name: "",
+      phoneNumber: "",
+      email: "",
+      address: "",
       experience: [],
       skills: [],
-      interests: [],
     };
-
-    this.setState({
-      error: "",
-      submitting: false,
-    });
 
     this.props.setResume(newResume);
   }
@@ -106,37 +101,40 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
             </div>
 
             <div className="custom-form-group-one-third">
-              <label className="custom-form-label" htmlFor="gender">Gender</label>
-              <select
-                className="custom-form-select"
-                id="gender"
-                name="gender"
-                value={this.props.resume.gender}
-                onChange={event => this.handleSelectChange(event)}
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
+              <label className="custom-form-label" htmlFor="phoneNumber">Phone Number</label>
+              <input
+                className="custom-form-input"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={this.props.resume.phoneNumber}
+                onChange={event => this.handleInputChange(event)}
+              />
             </div>
 
             <div className="custom-form-group-one-third">
-              <label className="custom-form-label" htmlFor="age">Age</label>
+              <label className="custom-form-label" htmlFor="email">Email</label>
               <input
                 className="custom-form-input"
-                id="age"
-                name="age"
-                type="number"
-                value={this.props.resume.age}
+                id="email"
+                name="email"
+                value={this.props.resume.email}
                 onChange={event => this.handleInputChange(event)}
               />
             </div>
           </div>
 
-          <label className="custom-form-label">Skills</label>
-          <ItemList 
-            items={this.props.resume.skills}
-            onChange={skills => this.handleChange("skills", skills)}
-          />
+          <div className="custom-form-group">
+            <div className="custom-form-group-full">
+              <label className="custom-form-label" htmlFor="address">Address</label>
+              <input
+                className="custom-form-input"
+                id="address"
+                name="address"
+                value={this.props.resume.address}
+                onChange={event => this.handleInputChange(event)}
+              />
+            </div>
+          </div>
 
           <label className="custom-form-label">Experience</label>
           <ItemList 
@@ -144,10 +142,10 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
             onChange={experience => this.handleChange("experience", experience)}
           />
 
-          <label className="custom-form-label">Interests</label>
+          <label className="custom-form-label">Skills</label>
           <ItemList 
-            items={this.props.resume.interests}
-            onChange={interests => this.handleChange("interests", interests)}
+            items={this.props.resume.skills}
+            onChange={skills => this.handleChange("skills", skills)}
           />
         </div>
       </div>

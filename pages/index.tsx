@@ -30,12 +30,12 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.state = {
       stepIndex: 0,
       resume: {
-        name: "John Doe",
-        gender: "Male",
-        age: 25,
+        name: "",
+        phoneNumber: "",
+        email: "",
+        address: "",
         experience: [],
         skills: [],
-        interests: [],
       },
       jobs: [],
       selectedJobIndex: undefined,

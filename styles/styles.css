@@ -55,6 +55,10 @@
         @apply flex;
     }
 
+    .custom-form-group-full {
+        @apply w-full pr-2;
+    }
+
     .custom-form-group-half {
         @apply w-1/2 pr-2;
     }

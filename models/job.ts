@@ -1,6 +1,7 @@
 export interface CoachJob {
   name: string;
   company: string;
+  hiringManager: string;
   monthlySalaryLowInDollar: number;
   monthlySalaryHighInDollar: number;
   requiredDegree: string;
