@@ -10,7 +10,7 @@
     }
 
     .custom-form {
-        @apply p-6 bg-gray-100;
+        @apply p-4 bg-gray-100;
     }
 
     .custom-header {

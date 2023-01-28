@@ -322,6 +322,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         </Head>
 
         <div className="custom-form">
+          {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
+
           <div className="flex">
             <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
             <div className="ml-auto">
@@ -351,11 +353,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
               </button>}
             </div>
           </div>
-
-          { steps[this.state.stepIndex].component }
-
-          {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
         </div>
+
+        { steps[this.state.stepIndex].component }
+
       </div>
 
     );

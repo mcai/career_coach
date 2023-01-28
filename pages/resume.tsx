@@ -45,7 +45,7 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
   render() {
     return (
       <div className="custom-form">
-        <div className="mt-4">
+        <div>
           <div className="custom-form-group">
             <div className="custom-form-group-one-third">
               <label className="custom-form-label" htmlFor="name">Name</label>

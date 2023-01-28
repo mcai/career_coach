@@ -23,11 +23,10 @@ export class CoverLetterPage extends React.Component<CoverLetterPageProps, Cover
   // function to render the component
   render() {
     return (
-      <div className="custom-form">
-        <div className="mt-4">
+      <div className="h-screen custom-form">
+        <div className="h-full">
           <textarea 
             value={(this.props.coverLetter ?? "").trim()} 
-            readOnly 
             className="cover-letter-textarea h-full"
             onChange={(event) => {this.props.setCoverLetter(event.target.value)}} 
           />
