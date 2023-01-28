@@ -45,10 +45,6 @@ export class JobPage extends React.Component<JobPageProps, JobPageState> {
   render() {
     return (
       <div className="custom-form">
-        <Head>
-          <title>Career Coach</title>
-        </Head>
-
         <div className="mt-4">
           <div className="custom-form-group">
             <div className="custom-form-group-half">

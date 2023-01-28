@@ -45,10 +45,6 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
   render() {
     return (
       <div className="custom-form">
-        <Head>
-          <title>Career Coach</title>
-        </Head>
-
         <div className="mt-4">
           <div className="custom-form-group">
             <div className="custom-form-group-one-third">

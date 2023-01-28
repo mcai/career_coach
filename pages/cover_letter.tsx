@@ -24,10 +24,6 @@ export class CoverLetterPage extends React.Component<CoverLetterPageProps, Cover
   render() {
     return (
       <div className="custom-form">
-        <Head>
-          <title>Career Coach</title>
-        </Head>
-
         <div className="mt-4">
           <textarea 
             value={(this.props.coverLetter ?? "").trim()} 
