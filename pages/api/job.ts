@@ -6,9 +6,11 @@ import { openAiRequest } from "../../utils/openai"
 // Generate a prompt for OpenAI's GPT-3
 function generatePrompt(input: {
     resume: CoachResume,
+    language: string,
 }) {
     let prompt = `I'll give you a JSON string describing my resume.`;
     prompt += `You are required to generate a JSON string of next job position that both follows my potential career path and aligns with my resume following the format: {"title":string, "company":string, "location":string, "hiringManager":string, "description":string, "responsibility":string[], "qualifications":string[], "salary":number, "type":string}. Surround keys with a pair of commas.`;
+    prompt += `The output fields should be filled using the ${input.language} language.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;

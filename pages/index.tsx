@@ -14,6 +14,7 @@ export interface IndexProps {
 // state for the Index component
 export interface IndexState {
   stepIndex: number;
+  language: string;
   career: string;
   resume: CoachResume;
   job: CoachJob;
@@ -29,6 +30,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
     this.state = {
       stepIndex: 0,
+      language: "English",
       career: "",
       resume: {
         name: "",
@@ -59,6 +61,12 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
   // function to be called when the component is mounted
   componentDidMount() {
+    // load the language from session storage
+    const savedLanguage = sessionStorage.getItem('language');
+    if (savedLanguage) {
+      this.setState({ language: savedLanguage });
+    }
+
     // load the career from session storage
     const savedCareer = sessionStorage.getItem('career');
     if (savedCareer) {
@@ -132,7 +140,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   async fetchCareer() {
     await this.fetch(
       "/api/career",
-      {},
+      {
+        language: this.state.language
+      },
       'career',
       career => this.setCareer(career)
     )
@@ -142,7 +152,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     await this.fetch(
       "/api/resume", 
       {
-        career: this.state.career
+        career: this.state.career,
+        language: this.state.language
       }, 
       'resume', 
       resume => this.setResume(resume)
@@ -153,7 +164,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     await this.fetch(
       "/api/job", 
       { 
-        resume: this.state.resume 
+        resume: this.state.resume,
+        language: this.state.language
       }, 
       'job', 
       job => this.setJob(job)
@@ -165,7 +177,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       "/api/cover_letter", 
       { 
         resume: this.state.resume,
-        job: this.state.job
+        job: this.state.job,
+        language: this.state.language
       },
       'coverLetter', 
       coverLetter => this.setCoverLetter(coverLetter)

@@ -7,9 +7,11 @@ import { openAiRequest } from "../../utils/openai"
 function generatePrompt(input: {
     resume: CoachResume,
     job: CoachJob,
+    language: string,
 }) {
     let prompt = `I'll give you JSON strings describing my personal resume and a job position.`;
     prompt += `You are required to generate a string of a cover letter that both follows my potential career path and aligns with my resume and the job position.`;
+    prompt += `The output should be written using the ${input.language} language.`;
     prompt += `input:${JSON.stringify(input)}, output:`;
 
     return prompt;

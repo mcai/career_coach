@@ -2,8 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { openAiRequest } from "../../utils/openai"
 
 // Generate a prompt for OpenAI's GPT-3
-function generatePrompt(input: any) {
+function generatePrompt(input: {
+    language: string,
+}) {
     let prompt = `Generate a random career name.`;
+    prompt += `The output should be written using the ${input.language} language.`;
 
     return prompt;
 }
