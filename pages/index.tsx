@@ -322,9 +322,9 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         </Head>
 
         <div className="custom-form">
-          <div className="flex justify-between">
+          <div className="flex">
             <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
-            <div className="pr-2">
+            <div className="ml-auto">
               <button onClick={() => this.handleReset()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'reset-button'} mr-2`}>Reset</button>
               <button onClick={() => this.handleRandom()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'random-button'} mr-2`}>Random</button>
 

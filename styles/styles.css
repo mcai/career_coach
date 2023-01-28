@@ -46,7 +46,7 @@
     }
 
     .custom-form-button {
-        @apply mt-4 p-2;
+        @apply p-2;
     }
     
     .custom-form-button-primary {
@@ -62,7 +62,7 @@
     }
       
     .reset-button {
-    @apply bg-red-500 text-white font-medium py-2 px-4 rounded-md;
+        @apply bg-red-500 text-white font-medium py-2 px-4 rounded-md;
     }
 
     .disabled-button {
