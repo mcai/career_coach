@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React from "react";
 import { CoachResume } from "../models/resume";
 import { ItemList } from "../components/item_list";

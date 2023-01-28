@@ -13,6 +13,7 @@ export interface IndexProps {
 // state for the Index component
 export interface IndexState {
   stepIndex: number;
+  career: string;
   resume: CoachResume;
   job: CoachJob;
   coverLetter: string;
@@ -27,6 +28,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
     this.state = {
       stepIndex: 0,
+      career: "",
       resume: {
         name: "",
         phoneNumber: "",
@@ -56,6 +58,12 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
   // function to be called when the component is mounted
   componentDidMount() {
+    // load the career from session storage
+    const savedCareer = sessionStorage.getItem('career');
+    if (savedCareer) {
+      this.setState({ career: savedCareer });
+    }
+
     // load the resume from session storage
     const savedResume = JSON.parse(sessionStorage.getItem('resume') ?? "{}");
     if (savedResume) {
@@ -81,7 +89,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  async fetchResume() {
+  private async fetch(url: string, body: any, stateKey: string, setStateFn: (data: any) => void) {
     if (this.state.submitting) {
       return;
     }
@@ -91,13 +99,12 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       submitting: true,
     });
 
-    const response = await fetch("/api/resume", {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-      }),
+      body: JSON.stringify(body),
     });
 
     const json = await response.json();
@@ -106,7 +113,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       console.log("Success:", json);
 
       // update the result
-      this.setResume(json.resume);
+      setStateFn(json[stateKey]);
 
       // clear the submitting flag
       this.setState({ submitting: false });
@@ -119,89 +126,50 @@ export default class Index extends React.Component<IndexProps, IndexState> {
       // clear the submitting flag
       this.setState({ submitting: false });
     }
+  }
+
+  async fetchResume() {
+    await this.fetch(
+      "/api/career",
+      {},
+      'career',
+      career => this.setCareer(career)
+    )
+
+    // pause for 1 second to allow the career to be set
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await this.fetch(
+      "/api/resume", 
+      {
+        career: this.state.career
+      }, 
+      'resume', 
+      resume => this.setResume(resume)
+    )
   }
 
   async fetchJob() {
-    if (this.state.submitting) {
-      return;
-    }
-
-    this.setState({ 
-      error: undefined,
-      submitting: true,
-    });
-
-    const response = await fetch("/api/job", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-        resume: this.state.resume,
-      }),
-    });
-  
-    const json = await response.json();
-  
-    if (response.status === 200) {
-      console.log("Success:", json);
-  
-      // update the result
-      this.setJob(json.job);
-    
-      // clear the submitting flag
-      this.setState({ submitting: false });
-    } else {
-      console.error("Error:", json);
-
-      // update the results
-      this.setState({ error: json.error });
-    
-      // clear the submitting flag
-      this.setState({ submitting: false });
-    }
+    await this.fetch(
+      "/api/job", 
+      { 
+        resume: this.state.resume 
+      }, 
+      'job', 
+      job => this.setJob(job)
+    )
   }
 
   async fetchCoverLetter() {
-    if (this.state.submitting) {
-      return;
-    }
-
-    this.setState({ 
-      error: undefined,
-      submitting: true,
-    });
-
-    const response = await fetch("/api/cover_letter", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    await this.fetch(
+      "/api/cover_letter", 
+      { 
         resume: this.state.resume,
-        job: this.state.job,
-      }),
-    });
-  
-    const json = await response.json();
-  
-    if (response.status === 200) {
-        console.log("Success:", json);
-  
-        // update the result
-        this.setCoverLetter(json.coverLetter);
-    
-        // clear the submitting flag
-        this.setState({ submitting: false });
-    } else {
-        console.error("Error:", json);
-
-        // update the results
-        this.setState({ error: json.error });
-    
-        // clear the submitting flag
-        this.setState({ submitting: false });
-    }
+        job: this.state.job
+      },
+      'coverLetter', 
+      coverLetter => this.setCoverLetter(coverLetter)
+    )
   }
 
   handleNext() {
@@ -214,6 +182,11 @@ export default class Index extends React.Component<IndexProps, IndexState> {
 
   handleComplete() {
     this.setStepIndex(0);
+  }
+
+  setCareer(career: string) {
+    this.setState({ career: career });
+    sessionStorage.setItem('career', career);
   }
 
   setResume(resume: CoachResume) {
@@ -322,8 +295,6 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         </Head>
 
         <div className="custom-form">
-          {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
-
           <div className="flex">
             <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
             <div className="ml-auto">
@@ -355,10 +326,10 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           </div>
         </div>
 
+        {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
+
         { steps[this.state.stepIndex].component }
-
       </div>
-
     );
   }
 }

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import React from "react";
 
 // properties for the CoverLetterPage component

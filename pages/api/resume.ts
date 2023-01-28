@@ -4,10 +4,9 @@ import { openAiRequest } from "../../utils/openai"
 
 // Generate a prompt for OpenAI's GPT-3
 function generatePrompt(input: {
-    resume: CoachResume,
+    career: string,
 }) {
-    let prompt = `You are required to generate a JSON string of resume matching a random career (name:string, phoneNumber:string, email:string, address:string, linkedIn:string, education:string[], workExperience:string[], skills:string[]). Surround keys with a pair of commas.`;
-    prompt += `input:${JSON.stringify(input)}, output:`;
+    let prompt = `You are required to generate a JSON string of resume matching a ${input.career} (name:string, phoneNumber:string, email:string, address:string, linkedIn:string, education:string[], workExperience:string[], skills:string[]). Surround keys with a pair of commas.`;
 
     return prompt;
 }
@@ -15,6 +14,7 @@ function generatePrompt(input: {
 // Parse the result from OpenAI's GPT-3
 function parseResult(result: string | undefined) {
     const resume: CoachResume = JSON.parse(result || "{}");
+
     return {
         resume: resume,
     };

@@ -17,7 +17,11 @@ function generatePrompt(input: {
 
 // Parse the result from OpenAI's GPT-3
 function parseResult(result: string | undefined) {
-    const coverLetter: string = result || "";
+    let coverLetter: string = result || "";
+
+    // trim the result
+    coverLetter = coverLetter.trim();
+
     return {
         coverLetter: coverLetter,
     };
