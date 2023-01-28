@@ -5,6 +5,7 @@ import { CoachResume } from "../models/resume";
 import { JobPage } from "./job";
 import { ResumePage } from "./resume";
 import { CoverLetterPage } from "./cover_letter";
+import { CareerPage } from "./career";
 
 // properties for the Index component
 export interface IndexProps {
@@ -128,17 +129,16 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     }
   }
 
-  async fetchResume() {
+  async fetchCareer() {
     await this.fetch(
       "/api/career",
       {},
       'career',
       career => this.setCareer(career)
     )
+  }
 
-    // pause for 1 second to allow the career to be set
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
+  async fetchResume() {
     await this.fetch(
       "/api/resume", 
       {
@@ -213,12 +213,15 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   handleRandom() {
     switch (this.state.stepIndex) {
       case 0:
-        this.fetchResume();
+        this.fetchCareer();
         break;
       case 1:
-        this.fetchJob();
+        this.fetchResume();
         break;
       case 2:
+        this.fetchJob();
+        break;
+      case 3:
         this.fetchCoverLetter();
         break;
       default:
@@ -230,6 +233,8 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   handleReset() {
     switch (this.state.stepIndex) {
       case 0:
+        this.setCareer("");
+      case 1:
         this.setResume({
           name: "",
           phoneNumber: "",
@@ -241,7 +246,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           skills: [],
         });
         break;
-      case 1:
+      case 2:
         this.setJob({
           title: "",
           company: "",
@@ -254,7 +259,7 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           type: "",
         });
         break;
-      case 2:
+      case 3:
         this.setCoverLetter("");
         break;
       default:
@@ -265,6 +270,13 @@ export default class Index extends React.Component<IndexProps, IndexState> {
   // function to render the component
   render() {
     const steps: {title: string, component: React.ReactNode}[] = [
+      {
+        title: 'Career',
+        component: <CareerPage
+          career={this.state.career}
+          setCareer={(career) => this.setCareer(career)}
+        />
+      },
       { 
         title: 'Resume', 
         component: <ResumePage
