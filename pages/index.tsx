@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React from "react";
-import { Wizard } from "../components/wizard";
 import { CoachJob } from "../models/job";
 import { CoachResume } from "../models/resume";
 import { JobPage } from "./job";
@@ -237,6 +236,59 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     sessionStorage.setItem('stepIndex', stepIndex.toString());
   }
 
+  // function to handle the random button
+  handleRandom() {
+    switch (this.state.stepIndex) {
+      case 0:
+        this.fetchResume();
+        break;
+      case 1:
+        this.fetchJob();
+        break;
+      case 2:
+        this.fetchCoverLetter();
+        break;
+      default:
+        break;
+    }
+  }
+
+  // function to handle the reset button
+  handleReset() {
+    switch (this.state.stepIndex) {
+      case 0:
+        this.setResume({
+          name: "",
+          phoneNumber: "",
+          email: "",
+          address: "",
+          linkedIn: "",
+          education: [],
+          workExperience: [],
+          skills: [],
+        });
+        break;
+      case 1:
+        this.setJob({
+          title: "",
+          company: "",
+          location: "",
+          hiringManager: "",
+          description: "",
+          responsibility: [],
+          qualifications: [],
+          salary: 0,
+          type: "",
+        });
+        break;
+      case 2:
+        this.setCoverLetter("");
+        break;
+      default:
+        break;
+    }
+  }
+
   // function to render the component
   render() {
     const steps: {title: string, component: React.ReactNode}[] = [
@@ -244,7 +296,6 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         title: 'Resume', 
         component: <ResumePage
           resume={this.state.resume}
-          fetchResume={() => this.fetchResume()}
           setResume={(resume) => this.setResume(resume)}
         />
       },
@@ -252,7 +303,6 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         title: 'Job', 
         component: <JobPage
           job={this.state.job}
-          fetchJob={() => this.fetchJob()}
           setJob={(job) => this.setJob(job)}
         />
       },
@@ -260,7 +310,6 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         title: 'Cover Letter', 
         component: <CoverLetterPage
           coverLetter={this.state.coverLetter}
-          fetchCoverLetter={() => this.fetchCoverLetter()}
           setCoverLetter={(coverLetter) => this.setCoverLetter(coverLetter)}
         />
       },
@@ -272,14 +321,37 @@ export default class Index extends React.Component<IndexProps, IndexState> {
           <title>Career Coach</title>
         </Head>
 
-        <Wizard 
-          steps={steps} 
-          onComplete={() => this.handleComplete()}
-          stepIndex={this.state.stepIndex}
-          handleNext={() => this.handleNext()}
-          handlePrevious={() => this.handlePrevious()}
-          submitting={this.state.submitting}
-        />
+        <div className="flex justify-between">
+          <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
+          <div>
+            <button onClick={() => this.handleReset()} className="custom-form-button reset-button">Reset</button>
+            <button onClick={() => this.handleRandom()} className="custom-form-button random-button">Random</button>
+
+            {this.state.stepIndex !== 0 && <button
+                className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                disabled={this.state.submitting}
+                onClick={() => this.handlePrevious()}
+            >
+                Previous
+            </button>}
+            {this.state.stepIndex !== steps.length - 1 && <button
+                className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                disabled={this.state.submitting}
+                onClick={() => this.handleNext()}
+            >
+                Next
+            </button>}
+            {this.state.stepIndex === steps.length - 1 && <button 
+                className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'}`} 
+                disabled={this.state.submitting}
+                onClick={() => this.handleComplete()}
+            >
+                Complete
+            </button>}
+          </div>
+        </div>
+
+        { steps[this.state.stepIndex].component }
 
         {this.state.error && <p className="error-message">{`${this.state.error}`}</p>}
       </div>

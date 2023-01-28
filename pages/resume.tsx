@@ -6,7 +6,6 @@ import { ItemList } from "../components/item_list";
 // properties for the ResumePage component
 export interface ResumePageProps {
     resume: CoachResume;
-    fetchResume: () => void;
     setResume: (resume: CoachResume) => void;
 }
 
@@ -42,27 +41,6 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
     this.handleChange(name, value);
   }
 
-  // function to handle the random button
-  handleRandom() {
-    this.props.fetchResume();
-  }
-
-  // function to handle the reset button
-  handleReset() {
-    const newResume: CoachResume = {
-      name: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-      linkedIn: "",
-      education: [],
-      workExperience: [],
-      skills: [],
-    };
-
-    this.props.setResume(newResume);
-  }
-
   // function to render the component
   render() {
     return (
@@ -70,14 +48,6 @@ export class ResumePage extends React.Component<ResumePageProps, ResumePageState
         <Head>
           <title>Career Coach</title>
         </Head>
-
-        <div className="flex justify-between">
-          <h3 className="custom-header">Career Coach</h3>
-          <div>
-            <button onClick={() => this.handleRandom()} className="random-button mx-2">Random</button>
-            <button onClick={() => this.handleReset()} className="reset-button">Reset</button>
-          </div>
-        </div>
 
         <div className="mt-4">
           <div className="custom-form-group">

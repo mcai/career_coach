@@ -4,7 +4,6 @@ import React from "react";
 // properties for the CoverLetterPage component
 export interface CoverLetterPageProps {
   coverLetter: string;
-  fetchCoverLetter: () => void;
   setCoverLetter: (coverLetter: string) => void;
 }
 
@@ -21,16 +20,6 @@ export class CoverLetterPage extends React.Component<CoverLetterPageProps, Cover
     };
   }
 
-  // function to handle the random button
-  handleRandom() {
-    this.props.fetchCoverLetter();
-  }
-
-  // function to handle the reset button
-  handleReset() {
-    this.props.setCoverLetter("");
-  }
-
   // function to render the component
   render() {
     return (
@@ -38,14 +27,6 @@ export class CoverLetterPage extends React.Component<CoverLetterPageProps, Cover
         <Head>
           <title>Career Coach</title>
         </Head>
-
-        <div className="flex justify-between">
-          <h3 className="custom-header">Career Coach</h3>
-          <div>
-            <button onClick={() => this.handleRandom()} className="random-button mx-2">Random</button>
-            <button onClick={() => this.handleReset()} className="reset-button">Reset</button>
-          </div>
-        </div>
 
         <div className="mt-4">
           <textarea 

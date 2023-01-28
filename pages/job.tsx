@@ -6,7 +6,6 @@ import { CoachJob } from "../models/job";
 // properties for the JobPage component
 export interface JobPageProps {
     job: CoachJob;
-    fetchJob: () => void;
     setJob: (job: CoachJob) => void;
 }
 
@@ -42,28 +41,6 @@ export class JobPage extends React.Component<JobPageProps, JobPageState> {
     this.handleChange(name, value);
   }
 
-  // function to handle the random button
-  handleRandom() {
-    this.props.fetchJob();
-  }
-
-  // function to handle the reset button
-  handleReset() {
-    const newJob: CoachJob = {
-      title: "",
-      company: "",
-      location: "",
-      hiringManager: "",
-      description: "",
-      responsibility: [],
-      qualifications: [],
-      salary: 0,
-      type: "",
-    };
-
-    this.props.setJob(newJob);
-  }
-
   // function to render the component
   render() {
     return (
@@ -71,14 +48,6 @@ export class JobPage extends React.Component<JobPageProps, JobPageState> {
         <Head>
           <title>Career Coach</title>
         </Head>
-
-        <div className="flex justify-between">
-          <h3 className="custom-header">Career Coach</h3>
-          <div>
-            <button onClick={() => this.handleRandom()} className="random-button mx-2">Random</button>
-            <button onClick={() => this.handleReset()} className="reset-button">Reset</button>
-          </div>
-        </div>
 
         <div className="mt-4">
           <div className="custom-form-group">
