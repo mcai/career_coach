@@ -1,13 +1,13 @@
 export const languages = [
     {
-        name: "Chinese",
-        text: "中文",
-        code: "zh",
-    },
-    {
         name: "English",
         text: "English",
         code: "en",
+    },
+    {
+        name: "Chinese",
+        text: "中文",
+        code: "zh",
     },
     {
         name: "French",

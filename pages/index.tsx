@@ -6,6 +6,7 @@ import { JobPage } from "./job";
 import { ResumePage } from "./resume";
 import { CoverLetterPage } from "./cover_letter";
 import { CareerPage } from "./career";
+import { languages } from "../utils/languages";
 
 // properties for the Index component
 export interface IndexProps {
@@ -197,6 +198,11 @@ export default class Index extends React.Component<IndexProps, IndexState> {
     this.setStepIndex(0);
   }
 
+  setLanguage(language: string) {
+    this.setState({ language: language });
+    sessionStorage.setItem('language', language);
+  }
+
   setCareer(career: string) {
     this.setState({ career: career });
     sessionStorage.setItem('career', career);
@@ -320,33 +326,54 @@ export default class Index extends React.Component<IndexProps, IndexState> {
         </Head>
 
         <div className="custom-form">
-          <div className="flex">
-            <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
-            <div className="ml-auto">
-              <button onClick={() => this.handleReset()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'reset-button'} mr-2`}>Reset</button>
-              <button onClick={() => this.handleRandom()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'random-button'} mr-2`}>Random</button>
+          <div className="flex items-center justify-between">
+            <div className="w-1/5">
+              <select 
+                className="custom-form-select"
+                value={this.state.language}
+                onChange={(e) => this.setLanguage(e.target.value)}
+              >
+                {
+                  languages.map(language => {
+                    return (
+                      <option key={language.code} value={language.name}>{language.text}</option>
+                    )
+                  })
+                }
+              </select>
+            </div>
 
-              {this.state.stepIndex !== 0 && <button
-                  className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
-                  disabled={this.state.submitting}
-                  onClick={() => this.handlePrevious()}
-              >
-                  Previous
-              </button>}
-              {this.state.stepIndex !== steps.length - 1 && <button
-                  className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
-                  disabled={this.state.submitting}
-                  onClick={() => this.handleNext()}
-              >
-                  Next
-              </button>}
-              {this.state.stepIndex === steps.length - 1 && <button 
-                  className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
-                  disabled={this.state.submitting}
-                  onClick={() => this.handleComplete()}
-              >
-                  Complete
-              </button>}
+            <div className="w-2/5 text-center">
+              <h3 className="custom-header">Step {this.state.stepIndex + 1} of {steps.length} - {steps[this.state.stepIndex].title}</h3>
+            </div>
+
+            <div className="w-2/5">
+              <div className="ml-auto">
+                <button onClick={() => this.handleReset()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'reset-button'} mr-2`}>Reset</button>
+                <button onClick={() => this.handleRandom()} className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'random-button'} mr-2`}>Random</button>
+
+                {this.state.stepIndex !== 0 && <button
+                    className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
+                    disabled={this.state.submitting}
+                    onClick={() => this.handlePrevious()}
+                >
+                    Previous
+                </button>}
+                {this.state.stepIndex !== steps.length - 1 && <button
+                    className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
+                    disabled={this.state.submitting}
+                    onClick={() => this.handleNext()}
+                >
+                    Next
+                </button>}
+                {this.state.stepIndex === steps.length - 1 && <button 
+                    className={`custom-form-button ${this.state.submitting ? 'disabled-button' : 'custom-form-button-primary'} mr-2`} 
+                    disabled={this.state.submitting}
+                    onClick={() => this.handleComplete()}
+                >
+                    Complete
+                </button>}
+              </div>
             </div>
           </div>
         </div>
